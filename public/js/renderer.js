@@ -22,7 +22,7 @@ define([
 
   map.init(GameSystem, rows, cols, gridX, gridY, ctx);
   GameSystem.init({ map: map });
-  map.load('cave');
+  map.load('world');
 
   var frames = 0;
   var inputSystem = new InputSystem(GameSystem, map);

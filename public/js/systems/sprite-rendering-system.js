@@ -8,7 +8,18 @@ define([
       return e.layer;
     }).each(function(entity) {
       if (entity.spriteId) {
-        var sprite = sprites[entity.spriteId];
+        var sprite;
+
+        if (entity.direction) {
+          sprite = sprites[entity.direction];
+          ctx.drawImage(
+            sprites._image,
+            sprite.x, sprite.y, sprite.width, sprite.height,
+            entity.x, entity.y, entity.width, entity.height
+          );
+        }
+
+        sprite = sprites[entity.spriteId];
         ctx.drawImage(
           sprites._image,
           sprite.x, sprite.y, sprite.width, sprite.height,

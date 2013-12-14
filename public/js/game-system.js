@@ -33,7 +33,8 @@ define([
       this.createEntity('human', {
         element: 'fire',
         isPlayer: true,
-        layer: LAYERS.unit
+        layer: LAYERS.unit,
+        projectiles: [ 'fire', 'wind' ]
       });
     },
 

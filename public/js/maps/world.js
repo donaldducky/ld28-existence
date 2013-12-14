@@ -75,8 +75,10 @@ define([
       }
 
       // set player
+      var hero = map.GameSystem.getHero();
       heroStart = heroStart || currentMap.heroStart;
-      this.moveEntityTo(map.GameSystem.getHero(), heroStart.x, heroStart.y);
+      this.moveEntityTo(hero, heroStart.x, heroStart.y);
+      hero.direction = heroStart.direction;
     },
 
     unload: function() {
@@ -97,6 +99,13 @@ define([
       var triggerId = currentMap.triggerTiles[idx];
 
       return currentMap.triggers[triggerId] || function(){};
+    },
+
+    getActionAt: function(x, y) {
+      var idx = pointToIndex(x, y);
+      var actionId = currentMap.actionTiles[idx];
+
+      return currentMap.actions[actionId] || function(){};
     },
 
     // try to move the entity from point A to point B

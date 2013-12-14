@@ -6,7 +6,8 @@ define([
       backgroundColor: 'rgb(156, 191, 227)',
       heroStart: {
         x: 6,
-        y: 9
+        y: 9,
+        direction: 'down'
       },
       tiles: [
         "11111111111141111111",
@@ -20,7 +21,7 @@ define([
         "10000000000000302221",
         "10000000000000302221",
         "10000000000000302221",
-        "10000000000000322221",
+        "10006000000000322221",
         "10000000000000322221",
         "10000000000000322221",
         "11111111111111111111"
@@ -42,11 +43,33 @@ define([
         "00000000000000000000",
         "00000000000000000000"
       ],
+      actionTiles: [
+        "                    ",
+        "                    ",
+        "                    ",
+        "                    ",
+        "                    ",
+        "                    ",
+        "                    ",
+        "                    ",
+        "                    ",
+        "                    ",
+        "                    ",
+        "    a               ",
+        "                    ",
+        "                    ",
+        "                    "
+      ],
       triggers: {
         1: function(entity, GameSystem) {
-            console.log('cave entrance');
-            GameSystem.getMap().load('cave', { x: 11, y: 0 });
-          }
+          console.log('cave entrance');
+          GameSystem.getMap().load('cave', { x: 11, y: 0 });
+        }
+      },
+      actions: {
+        a: function(entity, GameSystem, x, y) {
+          console.log('interacted with tree @', x, y);
+        }
       }
     },
 
@@ -54,7 +77,8 @@ define([
       backgroundColor: 'rgb(200, 200, 200)',
       heroStart: {
         x: 5,
-        y: 5
+        y: 5,
+        direction: 'down'
       },
       tiles: [
         "11111111111141111111",
@@ -136,6 +160,11 @@ define([
       maps[id].unitTiles = map.unitTiles.join('');
     } else {
       maps[id].unitTiles = '';
+    }
+    if (maps[id].actionTiles) {
+      maps[id].actionTiles = map.actionTiles.join('');
+    } else {
+      maps[id].actionTiles = '';
     }
   });
 

@@ -18,7 +18,6 @@ define([
   entities.dog = entities.sprite.extend({
     spriteId: 'dog',
     movement: 1,
-    element: false,
     solid: true
   });
 
