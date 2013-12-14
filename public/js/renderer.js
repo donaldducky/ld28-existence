@@ -3,14 +3,15 @@ define([
   'keymaster',
   'underscore',
   'sprites',
-  'components',
   'systems/sprite-transforming-system',
   'systems/sprite-rendering-system',
   'systems/entity-destroying-system',
   'systems/debug-grid-system',
   'maps/world',
-  'entity-factory'
-], function($, key, _, sprites, c, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, world, entityFactory){
+  'entity-factory',
+  'data/projectiles',
+  'data/layers'
+], function($, key, _, sprites, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, world, entityFactory, PROJECTILES, LAYERS){
   var canvas = document.getElementById('drawingboard');
   var ctx = canvas.getContext('2d');
 
@@ -23,56 +24,61 @@ define([
   var rows = height / grid;
   var cols = width / grid;
 
-  var human = entityFactory('human', {
-    x: 192,
-    y: 288,
-    mapX: 6,
-    mapY: 9,
-    solid: true,
-    element: 'fire'
-  });
+  function createProjectile(entity) {
+    var element = entity.element;
+    if (_.has(PROJECTILES, element)) {
+      var props = PROJECTILES[element](entity);
+      entities.push(entityFactory(element, props));
+    }
+  }
+
+  function getPlayerEntity() {
+    return _.find(entities, function(entity) {
+      return entity.isPlayer;
+    });
+  }
 
   // movement
   key('w', function() {
-    world.moveEntityTo(human, human.mapX, human.mapY - 1);
+    var entity = getPlayerEntity();
+    world.moveEntityTo(entity, entity.mapX, entity.mapY - 1);
   });
   key('s', function() {
-    world.moveEntityTo(human, human.mapX, human.mapY + 1);
+    var entity = getPlayerEntity();
+    world.moveEntityTo(entity, entity.mapX, entity.mapY + 1);
   });
   key('a', function() {
-    world.moveEntityTo(human, human.mapX - 1, human.mapY);
+    var entity = getPlayerEntity();
+    world.moveEntityTo(entity, entity.mapX - 1, entity.mapY);
   });
   key('d', function() {
-    world.moveEntityTo(human, human.mapX + 1, human.mapY);
+    var entity = getPlayerEntity();
+    world.moveEntityTo(entity, entity.mapX + 1, entity.mapY);
   });
 
-  var validHumanElements = [
-    'fire',
-    'wind'
-  ];
   // action
   key('enter', function() {
-    if (_.contains(validHumanElements, human.element)) {
-      var props = {
-        x: human.x + 10,
-        y: human.y
-      };
-      if (human.element === 'fire') {
-        props.removeAtX = props.x + 50;
-      } else if (human.element === 'wind') {
-        props.removeAtX = props.x + 150;
-      }
-      entities.push(entityFactory(human.element, props));
-    }
+    var entity = getPlayerEntity();
+    createProjectile(entity);
   });
 
   world.init(rows, cols, gridX, gridY);
   world.load();
-  var mapEntities = world.getEntities();
 
   var entities = [
-    human
+    entityFactory('human', {
+      x: 192,
+      y: 288,
+      mapX: 6,
+      mapY: 9,
+      solid: true,
+      element: 'fire',
+      isPlayer: true,
+      layer: LAYERS.unit
+    })
   ];
+
+  entities = entities.concat(world.getEntities());
 
   var frames = 0;
   ctx.fillStyle = 'rgb(156, 191, 227)';
@@ -89,7 +95,6 @@ define([
     spriteTransformingSystem(entities);
 
     // render sprites
-    spriteRenderingSystem(mapEntities, sprites, ctx);
     spriteRenderingSystem(entities, sprites, ctx);
 
     // remove everything to be destroyed

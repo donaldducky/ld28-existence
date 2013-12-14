@@ -1,16 +1,11 @@
 define([
   'entity-factory',
-  'underscore'
-], function(entityFactory, _){
+  'underscore',
+  'data/tiles',
+  'data/layers'
+], function(entityFactory, _, TILES, LAYERS){
   var isLoaded = false;
   var entities = [];
-  var tiles = {
-    0: { spriteId: 'grass', solid: false },
-    1: { spriteId: 'mountain', solid: true },
-    2: { spriteId: 'forest', solid: false },
-    3: { spriteId: 'river', solid: true },
-    4: { spriteId: 'cave', solid: false }
-  };
   var triggers = {
     1: function() { console.log('cave'); }
   };
@@ -54,12 +49,9 @@ define([
         for (y = 0; y < map.rows; y++) {
           index = pointToIndex(x, y);
           id = this.map[index];
-          var entity = entityFactory('sprite', _.extend(tiles[id], {
-            x: x * map.gridX,
-            y: y * map.gridY,
-            mapX: x,
-            mapY: y
-          }));
+          var entity = entityFactory('sprite', TILES[id]);
+          entity.layer = LAYERS.tile;
+          this.setEntityAt(entity, x, y);
           entities.push(entity);
         }
       }
@@ -76,15 +68,22 @@ define([
       return triggers[triggerId] || function(){};
     },
 
+    // try to move the entity from point A to point B
     moveEntityTo: function(entity, x, y) {
       if (isOnMap(x, y) && !isSolid(x, y)) {
-        entity.mapX = x;
-        entity.x = x * map.gridX;
-        entity.mapY = y;
-        entity.y = y * map.gridY;
-
+        this.setEntityAt(entity, x, y);
         this.getTriggerAt(x, y)(entity);
       }
+    },
+
+    // set an entity at a location
+    setEntityAt: function(entity, x, y) {
+      // set map position
+      entity.mapX = x;
+      entity.mapY = y;
+      // set canvas position
+      entity.x = x * map.gridX;
+      entity.y = y * map.gridY;
     }
   };
 

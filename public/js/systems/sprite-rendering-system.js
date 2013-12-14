@@ -3,7 +3,9 @@ define([
   'underscore'
 ], function(_){
   return function(entities, sprites, ctx) {
-    _.each(entities, function(entity) {
+    _.chain(entities).sortBy(function(e) {
+      return e.layer;
+    }).each(function(entity) {
       if (entity.spriteId) {
         var sprite = sprites[entity.spriteId];
         ctx.drawImage(
