@@ -10,7 +10,8 @@ define([
     forest: { x: 0, y: 32, width: 32, height: 32 },
     mountain: { x: 32, y: 32, width: 32, height: 32 },
     grass: { x: 32*2, y: 32, width: 32, height: 32 },
-    river: { x: 32*3, y: 32, width: 32, height: 32 }
+    river: { x: 32*3, y: 32, width: 32, height: 32 },
+    cave: { x: 32*4, y: 32, width: 32, height: 32 }
   };
 
   return sprites;

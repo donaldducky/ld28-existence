@@ -27,7 +27,7 @@ define([
   var SpriteEntity = Entity.extend(c.position, c.size);
 
   var Human = SpriteEntity.extend({
-    movement: 32,
+    movement: 1,
     spriteId: 'human',
     element: false
   });
@@ -54,22 +54,53 @@ define([
   var human = new Human({
     x: 192,
     y: 288,
-    element: 'wind'
+    mapX: 6,
+    mapY: 9,
+    solid: true,
+    element: 'fire'
   });
 
-  //var human = new Human(192, 288, Wind);
+  function isOnMap(x, y) {
+    return x >= 0 && x < cols && y >=0 && y < rows;
+  }
+
+  function isSolid(x, y) {
+    var entitiesHere = _.where(mapEntities, { mapX: x, mapY: y });
+    return _.find(entitiesHere, function(e) {
+      return e.solid;
+    });
+  }
+
+  function moveEntity(e, x, y) {
+    if (isOnMap(x, y) && !isSolid(x, y)) {
+      e.mapX = x;
+      e.x = x * gridX;
+      e.mapY = y;
+      e.y = y * gridY;
+
+      getMapTriggerAt(x, y)(e);
+    }
+  }
+
+  function getMapTriggerAt(x, y) {
+    var idx = pointToIndex(x, y);
+    var triggerId = triggers[idx];
+
+    return mapTriggers[triggerId] || function(){};
+  }
+
   // movement
-  key('w, up', function() {
-    human.y = Math.max(human.y - human.movement, 0);
+  key('w', function() {
+    moveEntity(human, human.mapX, human.mapY - 1);
   });
-  key('s, down', function() {
-    human.y = Math.min(human.y + human.movement, height - human.height);
+  key('s', function() {
+    moveEntity(human, human.mapX, human.mapY + 1);
   });
-  key('a, left', function() {
-    human.x = Math.max(human.x - human.movement, 0);
+  key('a', function() {
+    moveEntity(human, human.mapX - 1, human.mapY);
   });
-  key('d, right', function() {
-    human.x = Math.min(human.x + human.movement, width - human.width);
+  key('d', function() {
+    moveEntity(human, human.mapX + 1, human.mapY);
   });
 
   // action
@@ -91,12 +122,12 @@ define([
   // TODO sort entities by z-index? map vs other
   // 20 cols 15 rows
   var map =
-"11111111111111111111" +
+"11111111111141111111" +
 "12020200000000300021" +
 "12220200000000300021" +
 "12020200000000300021" +
 "10000000000000300221" +
-"10000000000000300221" +
+"10000000000000000221" +
 "10000000000000300221" +
 "10000000000000300221" +
 "10000000000000302221" +
@@ -107,25 +138,50 @@ define([
 "10000000000000322221" +
 "11111111111111111111"
 ;
+  var triggers =
+"00000000000010000000" +
+"00000000000000000000" +
+"00000000000000000000" +
+"00000000000000000000" +
+"00000000000000000000" +
+"00000000000000000000" +
+"00000000000000000000" +
+"00000000000000000000" +
+"00000000000000000000" +
+"00000000000000000000" +
+"00000000000000000000" +
+"00000000000000000000" +
+"00000000000000000000" +
+"00000000000000000000" +
+"00000000000000000000"
+;
+  function pointToIndex(x, y) {
+    return x + y*cols;
+  }
 
   var mapEntities = [];
   var mapObjects = {
-    0: 'grass',
-    1: 'mountain',
-    2: 'forest',
-    3: 'river'
+    0: { spriteId: 'grass', solid: false },
+    1: { spriteId: 'mountain', solid: true },
+    2: { spriteId: 'forest', solid: false },
+    3: { spriteId: 'river', solid: true },
+    4: { spriteId: 'cave', solid: false }
+  };
+  var mapTriggers = {
+    1: function() { console.log('cave'); }
   };
 
   var x, y, index, id;
   for (x = 0; x < cols; x++) {
     for (y = 0; y < rows; y++) {
-      index = x + y*cols;
+      index = pointToIndex(x, y);
       id = map[index];
-      var entity = new SpriteEntity({
+      var entity = new SpriteEntity(_.extend(mapObjects[id], {
         x: x * gridX,
         y: y * gridY,
-        spriteId: mapObjects[id]
-      });
+        mapX: x,
+        mapY: y
+      }));
       mapEntities.push(entity);
     }
   }
