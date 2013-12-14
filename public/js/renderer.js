@@ -9,9 +9,10 @@ define([
 
   var width = 640;
   var height = 480;
+  // TODO change grid to gridX gridY
   var grid = 32;
-
-
+  var rows = height / grid;
+  var cols = width / grid;
 
 
   var color = 'red';
@@ -38,8 +39,14 @@ define([
     this.x = x || 0;
     this.y = y || 0;
     this.speed = 32;
+
     this.height = 32;
     this.width = 32;
+    this.spriteSheet = sprites;
+    this.spriteX = 0;
+    this.spriteY = 0;
+    this.spriteWidth = 32;
+    this.spriteHeight = 32;
 
     _.bindAll(this, 'moveUp', 'moveDown', 'moveLeft', 'moveRight');
   }
@@ -57,7 +64,6 @@ define([
       this.x = Math.min(this.x + this.speed, width - this.width);
     },
     render: function(ctx) {
-      ctx.drawImage(sprites, 0, 0, grid, grid, this.x, this.y, this.width, this.height);
     }
   };
 
@@ -67,8 +73,14 @@ define([
     this.x = x || 0;
     this.y = y || 0;
     this.speed = 2;
+
     this.height = 32;
     this.width = 32;
+    this.spriteSheet = sprites;
+    this.spriteX = 32;
+    this.spriteY = 0;
+    this.spriteWidth = 32;
+    this.spriteHeight = 32;
 
     this.grow = 2;
 
@@ -77,22 +89,15 @@ define([
   }
   Fire.prototype = {
     render: function(ctx) {
-      ctx.drawImage(sprites, 32, 0, grid, grid, this.x, this.y, this.width, this.height);
-
       this.width += this.grow;
       this.height += this.grow;
-      this.y -= this.grow/2;
+      this.y -= this.grow / 2;
+      this.x -= this.grow / 2;
 
       this.x += this.speed;
       if (this.x > this.distance) {
-        this.destroy();
+        this.destroyed = true;
       }
-    },
-    destroy: function() {
-      var id = this.id;
-      entities = _.reject(entities, function(entity) {
-        return entity.id === id;
-      });
     }
   };
 
@@ -102,8 +107,14 @@ define([
     this.x = x || 0;
     this.y = y || 0;
     this.speed = 2;
+
     this.height = 32;
     this.width = 32;
+    this.spriteSheet = sprites;
+    this.spriteX = 32*4;
+    this.spriteY = 0;
+    this.spriteWidth = 32;
+    this.spriteHeight = 32;
 
     this.start = this.x;
     this.distance = this.x + 150;
@@ -111,24 +122,68 @@ define([
   }
   Wind.prototype = {
     render: function(ctx) {
-      ctx.drawImage(sprites, 32*4, 0, grid, grid, this.x, this.y, this.width, this.height);
-
       this.x += this.speed;
       this.counter += Math.PI/16;
       this.y = this.y + Math.sin(this.counter);
       if (this.x > this.distance) {
-        this.destroy();
+        this.destroyed = true;
       }
-    },
-    destroy: function() {
-      var id = this.id;
-      entities = _.reject(entities, function(entity) {
-        return entity.id === id;
-      });
     }
   };
 
-  var human = new Human(200, 300);
+  function Forest(x, y) {
+    this.x = x;
+    this.y = y;
+    this.height = 32;
+    this.width = 32;
+    this.spriteSheet = sprites;
+    this.spriteX = 0;
+    this.spriteY = 32;
+    this.spriteWidth = 32;
+    this.spriteHeight = 32;
+  }
+  Forest.prototype = { render: function(){} };
+
+  function Mountain(x, y) {
+    this.x = x;
+    this.y = y;
+    this.height = 32;
+    this.width = 32;
+    this.spriteSheet = sprites;
+    this.spriteX = 32;
+    this.spriteY = 32;
+    this.spriteWidth = 32;
+    this.spriteHeight = 32;
+  }
+  Mountain.prototype = { render: function(){} };
+
+  function Grass(x, y) {
+    this.x = x;
+    this.y = y;
+    this.height = 32;
+    this.width = 32;
+    this.spriteSheet = sprites;
+    this.spriteX = 32*2;
+    this.spriteY = 32;
+    this.spriteWidth = 32;
+    this.spriteHeight = 32;
+  }
+  Grass.prototype = { render: function(){} };
+
+  function River(x, y) {
+    this.x = x;
+    this.y = y;
+    this.height = 32;
+    this.width = 32;
+    this.spriteSheet = sprites;
+    this.spriteX = 32*3;
+    this.spriteY = 32;
+    this.spriteWidth = 32;
+    this.spriteHeight = 32;
+  }
+  River.prototype = { render: function(){} };
+
+  var human = new Human(192, 288);
   key('k, up', human.moveUp);
   key('j, down', human.moveDown);
   key('l, right', human.moveRight);
@@ -140,6 +195,66 @@ define([
   key('w', function() {
     entities.push(new Wind(human.x + 10, human.y));
   });
+
+  // TODO sort entities by z-index? map vs other
+  // 20 cols 15 rows
+  /*
+  var map = [
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 2, 2, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+  ];
+  */
+  var map =
+"11111111111111111111" +
+"12020200000000300021" +
+"12220200000000300021" +
+"12020200000000300021" +
+"10000000000000300221" +
+"10000000000000300221" +
+"10000000000000300221" +
+"10000000000000300221" +
+"10000000000000302221" +
+"10000000000000302221" +
+"10000000000000302221" +
+"10000000000000322221" +
+"10000000000000322221" +
+"10000000000000322221" +
+"11111111111111111111"
+;
+
+  var mapEntities = [];
+  var mapObjects = {
+    0: Grass,
+    1: Mountain,
+    2: Forest,
+    3: River
+  };
+
+  var x, y, index, id;
+  for (x = 0; x < cols; x++) {
+    for (y = 0; y < rows; y++) {
+      index = x + y*cols;
+      id = map[index];
+      var klass = mapObjects[id];
+      var entity = new klass(x * grid, y * grid);
+      mapEntities.push(entity);
+    }
+  }
+
+  console.log(mapEntities);
 
   var entities = [
     human
@@ -170,9 +285,18 @@ define([
     ctx.strokeStyle = '#eee';
     ctx.stroke();
 
-    // sprites
+    // entities
+    _.each(mapEntities, function(entity) {
+      ctx.drawImage(entity.spriteSheet, entity.spriteX, entity.spriteY, entity.spriteWidth, entity.spriteHeight, entity.x, entity.y, entity.width, entity.height);
+    });
     _.each(entities, function(entity) {
-      entity.render(ctx);
+      ctx.drawImage(entity.spriteSheet, entity.spriteX, entity.spriteY, entity.spriteWidth, entity.spriteHeight, entity.x, entity.y, entity.width, entity.height);
+      entity.render();
+    });
+
+    // remove everything to be destroyed
+    entities = _.reject(entities, function(entity) {
+      return entity.destroyed;
     });
   }
 
