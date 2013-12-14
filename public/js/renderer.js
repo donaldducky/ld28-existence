@@ -3,8 +3,12 @@ define([
   'jquery',
   'keymaster',
   'underscore',
-  'sprites'
-], function($, key, _, sprites){
+  'sprites',
+  'systems/sprite-transforming-system',
+  'systems/sprite-rendering-system',
+  'systems/entity-destroying-system',
+  'systems/debug-grid-system'
+], function($, key, _, sprites, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem){
   var canvas = document.getElementById('drawingboard');
   var ctx = canvas.getContext('2d');
 
@@ -12,6 +16,8 @@ define([
   var height = 480;
   // TODO change grid to gridX gridY
   var grid = 32;
+  var gridX = grid;
+  var gridY = grid;
   var rows = height / grid;
   var cols = width / grid;
 
@@ -127,9 +133,6 @@ define([
     entities.push(new human.element(human.x + 10, human.y));
   });
 
-  key('space', function() {
-  });
-
   // TODO sort entities by z-index? map vs other
   // 20 cols 15 rows
   var map =
@@ -164,7 +167,7 @@ define([
       index = x + y*cols;
       id = map[index];
       var klass = mapObjects[id];
-      var entity = new klass(x * grid, y * grid);
+      var entity = new klass(x * gridX, y * gridY);
       mapEntities.push(entity);
     }
   }
@@ -182,79 +185,17 @@ define([
     ctx.fillRect(0, 0, width, height);
 
     // grid
-    ctx.beginPath();
-    for (var x = 0.5; x < width; x+= grid) {
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, height);
-    }
-    for (var y = 0.5; y < height; y+= grid) {
-      ctx.moveTo(0, y);
-      ctx.lineTo(width, y);
-    }
-    ctx.closePath();
-    ctx.strokeStyle = '#eee';
-    ctx.stroke();
+    debugGridSystem(ctx, width, height, gridX, gridY);
 
     // transform entities
-    _.each(entities, function(entity) {
-      if (entity.scaleX) {
-        entity.width += entity.scaleX;
-        // re-center after scaling
-        entity.x -= entity.scaleX / 2;
-      }
-      if (entity.scaleY) {
-        entity.height += entity.scaleY;
-        // re-center after scaling
-        entity.y -= entity.scaleY / 2;
-      }
+    spriteTransformingSystem(entities);
 
-      if (entity.speedX) {
-        entity.x += entity.speedX;
-      }
-
-      if (entity.speedY) {
-        entity.y += entity.speedY;
-      }
-
-      if (entity.speedYIncrement) {
-        entity.speedYCounter += entity.speedYIncrement;
-        entity.y += Math.sin(entity.speedYCounter);
-      }
-    });
-
-    // entities
-    _.each(mapEntities, function(entity) {
-      if (entity.spriteId) {
-        var sprite = sprites[entity.spriteId];
-        ctx.drawImage(
-          sprites._image,
-          sprite.x, sprite.y, sprite.width, sprite.height,
-          entity.x, entity.y, entity.width, entity.height
-        );
-      }
-    });
-    _.each(entities, function(entity) {
-      if (entity.spriteId) {
-        var sprite = sprites[entity.spriteId];
-        ctx.drawImage(
-          sprites._image,
-          sprite.x, sprite.y, sprite.width, sprite.height,
-          entity.x, entity.y, entity.width, entity.height
-        );
-      }
-    });
-
-    // check if we need to remove any entities
-    _.each(entities, function(entity) {
-      if (entity.removeAtX && entity.x >= entity.removeAtX) {
-        entity.destroyed = true;
-      }
-    });
+    // render sprites
+    spriteRenderingSystem(mapEntities, sprites, ctx);
+    spriteRenderingSystem(entities, sprites, ctx);
 
     // remove everything to be destroyed
-    entities = _.reject(entities, function(entity) {
-      return entity.destroyed;
-    });
+    entities = entityDestroyingSystem(entities);
   }
 
   return renderer;
