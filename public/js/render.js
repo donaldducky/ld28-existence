@@ -1,7 +1,8 @@
 /*global define*/
 define([
-  'jquery'
-], function($){
+  'jquery',
+  'renderer'
+], function($, renderer){
   var frame = 0;
   var prevTime = (new Date()).getTime();
   var curTime;
@@ -16,6 +17,7 @@ define([
       elapsed = 0;
     }
     prevTime = curTime;
+    renderer();
   }
 
   return render;

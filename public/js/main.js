@@ -5,7 +5,8 @@ require.config({
     underscore: 'lib/underscore',
     jquery: 'lib/jquery',
     tpl: 'lib/tpl',
-    q: 'lib/q'
+    q: 'lib/q',
+    keymaster: 'lib/keymaster'
   },
   shim: {
     backbone: {
@@ -14,6 +15,9 @@ require.config({
     },
     underscore: {
       exports: '_'
+    },
+    keymaster: {
+      exports: 'key'
     }
   }
 });

@@ -18,6 +18,7 @@
     "jquery": "~2.0.3",
     "requirejs": "~2.1.9",
     "requirejs-tpl": "*",
-    "q": "~0.9.7"
+    "q": "~0.9.7",
+    "keymaster": "~1.6.1"
   }
 }
