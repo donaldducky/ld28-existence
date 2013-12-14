@@ -22,64 +22,49 @@ define([
   var rows = height / grid;
   var cols = width / grid;
 
-  var Human = Entity.extend({
-    x: 0,
-    y: 0,
+  // components
+  var c = {
+    position: {
+      x: 0,
+      y: 0
+    },
+    size: {
+      height: 32,
+      width: 32
+    }
+  };
+  var SpriteEntity = Entity.extend(c.position, c.size);
+
+  var Human = SpriteEntity.extend({
     movement: 32,
-    height: 32,
-    width: 32,
     spriteId: 'human',
     element: false
   });
 
-  var Fire = Entity.extend({
-    x: 0,
-    y: 0,
-    height: 32,
-    width: 32,
+  var Fire = SpriteEntity.extend({
     spriteId: 'fire',
     scaleX: 2,
     scaleY: 2,
     speedX: 3
   });
 
-  var Wind = Entity.extend({
-    x: 0,
-    y: 0,
-    height: 32,
-    width: 32,
+  var Wind = SpriteEntity.extend({
     spriteId: 'wind',
     speedX: 2,
     speedYCounter: Math.PI,
     speedYIncrement: Math.PI/16
   });
 
-  var Forest = Entity.extend({
-    x: 0,
-    y: 0,
-    height: 32,
-    width: 32,
+  var Forest = SpriteEntity.extend({
     spriteId: 'forest'
   });
-  var Mountain = Entity.extend({
-    x: 0,
-    y: 0,
-    height: 32,
-    width: 32,
+  var Mountain = SpriteEntity.extend({
     spriteId: 'mountain'
   });
-  var Grass = Entity.extend({
-    x: 0,
-    y: 0,
-    height: 32,
-    width: 32,
+  var Grass = SpriteEntity.extend({
     spriteId: 'grass'
   });
-  var River = Entity.extend({
-    x: 0,
-    y: 0,
-    height: 32,
-    width: 32,
+  var River = SpriteEntity.extend({
     spriteId: 'river'
   });
 
@@ -93,6 +78,7 @@ define([
     y: 288,
     element: 'wind'
   });
+  console.log(human);
 
   //var human = new Human(192, 288, Wind);
   // movement
