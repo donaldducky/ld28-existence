@@ -1,8 +1,9 @@
 /*global define*/
 define([
-  'underscore'
-], function(_){
-  return function(entities, sprites, ctx) {
+  'underscore',
+  'sprites'
+], function(_, sprites){
+  return function(entities, ctx) {
     _.chain(entities).sortBy(function(e) {
       return e.layer;
     }).each(function(entity) {

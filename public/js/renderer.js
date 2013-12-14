@@ -1,17 +1,16 @@
 define([
   'jquery',
-  'keymaster',
   'underscore',
-  'sprites',
   'systems/sprite-transforming-system',
   'systems/sprite-rendering-system',
   'systems/entity-destroying-system',
   'systems/debug-grid-system',
+  'systems/input-system',
   'maps/world',
   'entity-factory',
   'data/projectiles',
   'data/layers'
-], function($, key, _, sprites, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, world, entityFactory, PROJECTILES, LAYERS){
+], function($, _, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, world, entityFactory, PROJECTILES, LAYERS){
   var canvas = document.getElementById('drawingboard');
   var ctx = canvas.getContext('2d');
 
@@ -23,47 +22,6 @@ define([
   var gridY = grid;
   var rows = height / grid;
   var cols = width / grid;
-
-  function createProjectile(entity) {
-    var element = entity.element;
-    if (_.has(PROJECTILES, element)) {
-      var props = PROJECTILES[element](entity);
-      entities.push(entityFactory(element, props));
-    }
-  }
-
-  function getPlayerEntity() {
-    return _.find(entities, function(entity) {
-      return entity.isPlayer;
-    });
-  }
-
-  // movement
-  key('w', function() {
-    var entity = getPlayerEntity();
-    world.moveEntityTo(entity, entity.mapX, entity.mapY - 1);
-  });
-  key('s', function() {
-    var entity = getPlayerEntity();
-    world.moveEntityTo(entity, entity.mapX, entity.mapY + 1);
-  });
-  key('a', function() {
-    var entity = getPlayerEntity();
-    world.moveEntityTo(entity, entity.mapX - 1, entity.mapY);
-  });
-  key('d', function() {
-    var entity = getPlayerEntity();
-    world.moveEntityTo(entity, entity.mapX + 1, entity.mapY);
-  });
-
-  // action
-  key('enter', function() {
-    var entity = getPlayerEntity();
-    createProjectile(entity);
-  });
-
-  world.init(rows, cols, gridX, gridY);
-  world.load();
 
   var entities = [
     entityFactory('human', {
@@ -78,10 +36,19 @@ define([
     })
   ];
 
+  world.init(rows, cols, gridX, gridY);
+  world.load();
   entities = entities.concat(world.getEntities());
 
   var frames = 0;
   ctx.fillStyle = 'rgb(156, 191, 227)';
+
+  // can't seem to use entities array to add when passed by ref
+  function addEntity(entity) {
+    entities.push(entity);
+  }
+
+  var inputSystem = new InputSystem(entities, world, addEntity);
   function renderer() {
     frames++;
     // background color
@@ -95,7 +62,7 @@ define([
     spriteTransformingSystem(entities);
 
     // render sprites
-    spriteRenderingSystem(entities, sprites, ctx);
+    spriteRenderingSystem(entities, ctx);
 
     // remove everything to be destroyed
     entities = entityDestroyingSystem(entities);
