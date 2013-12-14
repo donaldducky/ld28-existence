@@ -8,7 +8,7 @@ define([
   'systems/input-system',
   'maps/world',
   'game-system'
-], function($, _, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, world, GameSystem){
+], function($, _, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, map, GameSystem){
   var canvas = document.getElementById('drawingboard');
   var ctx = canvas.getContext('2d');
 
@@ -19,15 +19,12 @@ define([
   var rows = height / gridX;
   var cols = width / gridY;
 
-  GameSystem.init();
-  world.init(GameSystem, rows, cols, gridX, gridY);
-  world.load();
+  map.init(GameSystem, rows, cols, gridX, gridY, ctx);
+  GameSystem.init({ map: map });
+  map.load('cave');
 
   var frames = 0;
-  ctx.fillStyle = 'rgb(156, 191, 227)';
-
-  // can't seem to use entities array to add when passed by ref
-  var inputSystem = new InputSystem(GameSystem, world);
+  var inputSystem = new InputSystem(GameSystem, map);
   function renderer() {
     frames++;
     // background color

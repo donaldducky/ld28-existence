@@ -1,13 +1,18 @@
 define([
+  'underscore',
   'entity-factory',
   'data/layers'
-], function(entityFactory, LAYERS){
+], function(_, entityFactory, LAYERS){
   var state = {
     entities: []
   };
 
+  var map;
+
   var GameSystem = {
-    init: function() {
+    init: function(options) {
+      map = options.map;
+
       this.createHero();
     },
     createEntity: function(type, properties) {
@@ -35,8 +40,12 @@ define([
 
     getHero: function() {
       return _.find(state.entities, function(e) {
-        return e.isPlayer
+        return e.isPlayer;
       });
+    },
+
+    getMap: function() {
+      return map;
     }
   };
 
