@@ -1,11 +1,9 @@
 define([
-  'entity-factory',
   'underscore',
   'data/tiles',
   'data/layers'
-], function(entityFactory, _, TILES, LAYERS){
+], function(_, TILES, LAYERS){
   var isLoaded = false;
-  var entities = [];
   var triggers = {
     1: function() { console.log('cave'); }
   };
@@ -21,19 +19,28 @@ define([
 
   // get entities at this position and check if we can go there
   function isSolid(x, y) {
-    var entitiesHere = _.where(entities, { mapX: x, mapY: y });
+    var entitiesHere = _.where(map.Game.getEntities(), { mapX: x, mapY: y });
     return _.find(entitiesHere, function(e) {
       return e.solid;
     });
   }
 
   var map = {};
+  var heroStart = {
+    x: 6,
+    y: 9
+  };
+
   var world = {
-    init: function(rows, cols, gridX, gridY) {
+    init: function(Game, rows, cols, gridX, gridY) {
+      map.Game = Game;
       map.rows = rows;
       map.cols = cols;
       map.gridX = gridX;
       map.gridY = gridY;
+
+      // set player
+      this.moveEntityTo(Game.getHero(), heroStart.x, heroStart.y);
     },
 
     load: function() {
@@ -49,16 +56,15 @@ define([
         for (y = 0; y < map.rows; y++) {
           index = pointToIndex(x, y);
           id = this.map[index];
-          var entity = entityFactory('sprite', TILES[id]);
+          var entity = map.Game.createEntity('sprite', TILES[id]);
           entity.layer = LAYERS.tile;
           this.setEntityAt(entity, x, y);
-          entities.push(entity);
         }
       }
     },
 
     getEntities: function() {
-      return entities;
+      return map.Game.getEntities();
     },
 
     getTriggerAt: function(x, y, cols) {

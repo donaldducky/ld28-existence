@@ -3,8 +3,8 @@ define([
   'underscore',
   'sprites'
 ], function(_, sprites){
-  return function(entities, ctx) {
-    _.chain(entities).sortBy(function(e) {
+  return function(GameSystem, ctx) {
+    _.chain(GameSystem.getEntities()).sortBy(function(e) {
       return e.layer;
     }).each(function(entity) {
       if (entity.spriteId) {

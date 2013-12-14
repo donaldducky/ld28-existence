@@ -2,8 +2,8 @@
 define([
   'underscore'
 ], function(_){
-  return function(entities) {
-    _.each(entities, function(entity) {
+  return function(GameSystem) {
+    _.each(GameSystem.getEntities(), function(entity) {
       if (entity.scaleX) {
         entity.width += entity.scaleX;
         // re-center after scaling

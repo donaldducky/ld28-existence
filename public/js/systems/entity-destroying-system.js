@@ -2,16 +2,17 @@
 define([
   'underscore'
 ], function(_){
-  return function(entities) {
-    // TODO get by properties
-    _.each(entities, function(entity) {
+  return function(GameSystem) {
+    _.each(GameSystem.getEntities(), function(entity) {
       if (entity.removeAtX && entity.x >= entity.removeAtX) {
         entity.destroyed = true;
       }
     });
 
-    return _.reject(entities, function(entity) {
+    var entities = _.reject(GameSystem.getEntities(), function(entity) {
       return entity.destroyed;
     });
+
+    GameSystem.setEntities(entities);
   };
 });

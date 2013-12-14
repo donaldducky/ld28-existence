@@ -7,48 +7,27 @@ define([
   'systems/debug-grid-system',
   'systems/input-system',
   'maps/world',
-  'entity-factory',
-  'data/projectiles',
-  'data/layers'
-], function($, _, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, world, entityFactory, PROJECTILES, LAYERS){
+  'game-system'
+], function($, _, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, world, GameSystem){
   var canvas = document.getElementById('drawingboard');
   var ctx = canvas.getContext('2d');
 
   var width = 640;
   var height = 480;
-  // TODO change grid to gridX gridY
-  var grid = 32;
-  var gridX = grid;
-  var gridY = grid;
-  var rows = height / grid;
-  var cols = width / grid;
+  var gridX = 32;
+  var gridY = 32;
+  var rows = height / gridX;
+  var cols = width / gridY;
 
-  var entities = [
-    entityFactory('human', {
-      x: 192,
-      y: 288,
-      mapX: 6,
-      mapY: 9,
-      solid: true,
-      element: 'fire',
-      isPlayer: true,
-      layer: LAYERS.unit
-    })
-  ];
-
-  world.init(rows, cols, gridX, gridY);
+  GameSystem.init();
+  world.init(GameSystem, rows, cols, gridX, gridY);
   world.load();
-  entities = entities.concat(world.getEntities());
 
   var frames = 0;
   ctx.fillStyle = 'rgb(156, 191, 227)';
 
   // can't seem to use entities array to add when passed by ref
-  function addEntity(entity) {
-    entities.push(entity);
-  }
-
-  var inputSystem = new InputSystem(entities, world, addEntity);
+  var inputSystem = new InputSystem(GameSystem, world);
   function renderer() {
     frames++;
     // background color
@@ -59,13 +38,13 @@ define([
     debugGridSystem(ctx, width, height, gridX, gridY);
 
     // transform entities
-    spriteTransformingSystem(entities);
+    spriteTransformingSystem(GameSystem);
 
     // render sprites
-    spriteRenderingSystem(entities, ctx);
+    spriteRenderingSystem(GameSystem, ctx);
 
     // remove everything to be destroyed
-    entities = entityDestroyingSystem(entities);
+    entityDestroyingSystem(GameSystem);
   }
 
   return renderer;
