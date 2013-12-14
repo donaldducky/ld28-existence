@@ -25,45 +25,22 @@ define([
 
     this.height = 32;
     this.width = 32;
-    this.spriteSheet = sprites;
-    this.spriteX = 0;
-    this.spriteY = 0;
-    this.spriteWidth = 32;
-    this.spriteHeight = 32;
+
+    this.spriteId = 'human';
 
     this.element = element;
-
-    _.bindAll(this, 'moveUp', 'moveDown', 'moveLeft', 'moveRight');
   }
-  Human.prototype = {
-    moveUp: function() {
-      this.y = Math.max(this.y - this.movement, 0);
-    },
-    moveDown: function() {
-      this.y = Math.min(this.y + this.movement, height - this.height);
-    },
-    moveLeft: function() {
-      this.x = Math.max(this.x - this.movement, 0);
-    },
-    moveRight: function() {
-      this.x = Math.min(this.x + this.movement, width - this.width);
-    }
-  };
 
   function Fire(x, y) {
     this.id = _.uniqueId('e');
 
     this.x = x || 0;
     this.y = y || 0;
-    this.speed = 2;
 
     this.height = 32;
     this.width = 32;
-    this.spriteSheet = sprites;
-    this.spriteX = 32;
-    this.spriteY = 0;
-    this.spriteWidth = 32;
-    this.spriteHeight = 32;
+
+    this.spriteId = 'fire';
 
     this.scaleX = 2;
     this.scaleY = 2;
@@ -84,11 +61,7 @@ define([
 
     this.height = 32;
     this.width = 32;
-    this.spriteSheet = sprites;
-    this.spriteX = 32*4;
-    this.spriteY = 0;
-    this.spriteWidth = 32;
-    this.spriteHeight = 32;
+    this.spriteId = 'wind';
 
     this.removeAtX = this.x + 150;
   }
@@ -96,58 +69,58 @@ define([
   function Forest(x, y) {
     this.x = x;
     this.y = y;
+
     this.height = 32;
     this.width = 32;
-    this.spriteSheet = sprites;
-    this.spriteX = 0;
-    this.spriteY = 32;
-    this.spriteWidth = 32;
-    this.spriteHeight = 32;
+
+    this.spriteId = 'forest';
   }
 
   function Mountain(x, y) {
     this.x = x;
     this.y = y;
+
     this.height = 32;
     this.width = 32;
-    this.spriteSheet = sprites;
-    this.spriteX = 32;
-    this.spriteY = 32;
-    this.spriteWidth = 32;
-    this.spriteHeight = 32;
+
+    this.spriteId = 'mountain';
   }
 
   function Grass(x, y) {
     this.x = x;
     this.y = y;
+
     this.height = 32;
     this.width = 32;
-    this.spriteSheet = sprites;
-    this.spriteX = 32*2;
-    this.spriteY = 32;
-    this.spriteWidth = 32;
-    this.spriteHeight = 32;
+
+    this.spriteId = 'grass';
   }
 
   function River(x, y) {
     this.x = x;
     this.y = y;
+
     this.height = 32;
     this.width = 32;
-    this.spriteSheet = sprites;
-    this.spriteX = 32*3;
-    this.spriteY = 32;
-    this.spriteWidth = 32;
-    this.spriteHeight = 32;
+
+    this.spriteId = 'river';
   }
 
   var human = new Human(192, 288, Wind);
   //var human = new Human(192, 288, Wind);
   // movement
-  key('w, up', human.moveUp);
-  key('s, down', human.moveDown);
-  key('d, right', human.moveRight);
-  key('a, left', human.moveLeft);
+  key('w, up', function() {
+    human.y = Math.max(human.y - human.movement, 0);
+  });
+  key('s, down', function() {
+    human.y = Math.min(human.y + human.movement, height - human.height);
+  });
+  key('a, left', function() {
+    human.x = Math.max(human.x - human.movement, 0);
+  });
+  key('d, right', function() {
+    human.x = Math.min(human.x + human.movement, width - human.width);
+  });
 
   // action
   key('enter', function() {
@@ -195,8 +168,6 @@ define([
       mapEntities.push(entity);
     }
   }
-
-  console.log(mapEntities);
 
   var entities = [
     human
@@ -253,10 +224,24 @@ define([
 
     // entities
     _.each(mapEntities, function(entity) {
-      ctx.drawImage(entity.spriteSheet, entity.spriteX, entity.spriteY, entity.spriteWidth, entity.spriteHeight, entity.x, entity.y, entity.width, entity.height);
+      if (entity.spriteId) {
+        var sprite = sprites[entity.spriteId];
+        ctx.drawImage(
+          sprites._image,
+          sprite.x, sprite.y, sprite.width, sprite.height,
+          entity.x, entity.y, entity.width, entity.height
+        );
+      }
     });
     _.each(entities, function(entity) {
-      ctx.drawImage(entity.spriteSheet, entity.spriteX, entity.spriteY, entity.spriteWidth, entity.spriteHeight, entity.x, entity.y, entity.width, entity.height);
+      if (entity.spriteId) {
+        var sprite = sprites[entity.spriteId];
+        ctx.drawImage(
+          sprites._image,
+          sprite.x, sprite.y, sprite.width, sprite.height,
+          entity.x, entity.y, entity.width, entity.height
+        );
+      }
     });
 
     // check if we need to remove any entities
