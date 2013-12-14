@@ -64,7 +64,6 @@ define([
 
           // create npcs
           var unitId = currentMap.unitTiles[index];
-          console.log(currentMap.unitTiles[index]);
           if (unitId && currentMap.npcs[unitId]) {
             var npc = currentMap.npcs[unitId];
             entity = map.GameSystem.createEntity(npc.entityId, npc.props);
@@ -93,7 +92,7 @@ define([
       return map.GameSystem.getEntities();
     },
 
-    getTriggerAt: function(x, y, cols) {
+    getTriggerAt: function(x, y) {
       var idx = pointToIndex(x, y);
       var triggerId = currentMap.triggerTiles[idx];
 
@@ -104,7 +103,10 @@ define([
     moveEntityTo: function(entity, x, y) {
       if (isOnMap(x, y) && !isSolid(x, y)) {
         this.setEntityAt(entity, x, y);
-        this.getTriggerAt(x, y)(entity, map.GameSystem);
+
+        if (entity.isPlayer) {
+          this.getTriggerAt(x, y)(entity, map.GameSystem);
+        }
       }
     },
 

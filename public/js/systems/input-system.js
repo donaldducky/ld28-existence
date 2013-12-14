@@ -23,7 +23,7 @@ define([
 
   function movePlayer(dx, dy) {
     var p = system.GameSystem.getHero();
-    system.world.moveEntityTo(p, p.mapX + dx, p.mapY + dy);
+    system.GameSystem.getMap().moveEntityTo(p, p.mapX + dx, p.mapY + dy);
   }
 
   function shootProjectile() {
@@ -37,10 +37,8 @@ define([
     system.GameSystem.createEntity(pName, props);
   }
 
-  function InputSystem(GameSystem, world) {
+  function InputSystem(GameSystem) {
     system.GameSystem = GameSystem;
-    system.world = world;
-
     this.init();
   }
 

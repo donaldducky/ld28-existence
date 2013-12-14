@@ -117,7 +117,9 @@ define([
         d: {
           entityId: 'dog',
           props: {
-            ai: 'random'
+            ai: 'random',
+            aiTicks: 0,
+            thinkSpeed: 100
           }
         }
       }

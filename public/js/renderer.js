@@ -6,9 +6,10 @@ define([
   'systems/entity-destroying-system',
   'systems/debug-grid-system',
   'systems/input-system',
+  'systems/ai-system',
   'maps/world',
   'game-system'
-], function($, _, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, map, GameSystem){
+], function($, _, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, aiSystem, map, GameSystem){
   var canvas = document.getElementById('drawingboard');
   var ctx = canvas.getContext('2d');
 
@@ -33,6 +34,8 @@ define([
 
     // grid
     debugGridSystem(ctx, width, height, gridX, gridY);
+
+    aiSystem(GameSystem);
 
     // transform entities
     spriteTransformingSystem(GameSystem);
