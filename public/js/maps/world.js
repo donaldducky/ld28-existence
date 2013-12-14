@@ -50,15 +50,28 @@ define([
       map.ctx.fillStyle = currentMap.backgroundColor;
 
       // create map entities
-      var x, y, index, id;
+      var x, y, index, id, entity;
       for (x = 0; x < map.cols; x++) {
         for (y = 0; y < map.rows; y++) {
           index = pointToIndex(x, y);
           id = currentMap.tiles[index];
-          var entity = map.GameSystem.createEntity('sprite', TILES[id]);
+
+          // create map tiles
+          entity = map.GameSystem.createEntity('sprite', TILES[id]);
           entity.layer = LAYERS.tile;
           entity.mapTile = true;
           this.setEntityAt(entity, x, y);
+
+          // create npcs
+          var unitId = currentMap.unitTiles[index];
+          console.log(currentMap.unitTiles[index]);
+          if (unitId && currentMap.npcs[unitId]) {
+            var npc = currentMap.npcs[unitId];
+            entity = map.GameSystem.createEntity(npc.entityId, npc.props);
+            entity.layer = LAYERS.unit;
+            entity.mapTile = true;
+            this.setEntityAt(entity, x, y);
+          }
         }
       }
 

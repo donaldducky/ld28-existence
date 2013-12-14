@@ -90,11 +90,36 @@ define([
         "00000000000000000000",
         "00000000000000000000"
       ],
+      unitTiles: [
+        "                    ",
+        "                    ",
+        "                    ",
+        "                    ",
+        "                    ",
+        "                    ",
+        "                    ",
+        "                    ",
+        "                    ",
+        "                    ",
+        "                    ",
+        "              d     ",
+        "                    ",
+        "                    ",
+        "                    "
+      ],
       triggers: {
         1: function(entity, GameSystem) {
             console.log('cave exit');
             GameSystem.getMap().load('world', { x: 11, y: 0 });
           }
+      },
+      npcs: {
+        d: {
+          entityId: 'dog',
+          props: {
+            ai: 'random'
+          }
+        }
       }
     }
   };
@@ -105,6 +130,11 @@ define([
     // join array of strings into a single string for indexing
     maps[id].tiles = map.tiles.join('');
     maps[id].triggerTiles = map.triggerTiles.join('');
+    if (maps[id].unitTiles) {
+      maps[id].unitTiles = map.unitTiles.join('');
+    } else {
+      maps[id].unitTiles = '';
+    }
   });
 
   return maps;

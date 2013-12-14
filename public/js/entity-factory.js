@@ -11,7 +11,15 @@ define([
   entities.human = entities.sprite.extend({
     spriteId: 'human',
     movement: 1,
-    element: false
+    element: false,
+    solid: true
+  });
+
+  entities.dog = entities.sprite.extend({
+    spriteId: 'dog',
+    movement: 1,
+    element: false,
+    solid: true
   });
 
   entities.fire = entities.sprite.extend({
@@ -33,6 +41,10 @@ define([
   var entityFactory = function(type, args) {
     if (arguments.length === 1) {
       return entities[type];
+    }
+
+    if (!entities[type]) {
+      console.error('unknown entity:', type);
     }
 
     return new entities[type](args);

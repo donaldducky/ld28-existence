@@ -31,7 +31,6 @@ define([
 
     createHero: function() {
       this.createEntity('human', {
-        solid: true,
         element: 'fire',
         isPlayer: true,
         layer: LAYERS.unit
