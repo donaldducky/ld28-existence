@@ -4,11 +4,12 @@ define([
   'keymaster',
   'underscore',
   'sprites',
+  'entity',
   'systems/sprite-transforming-system',
   'systems/sprite-rendering-system',
   'systems/entity-destroying-system',
   'systems/debug-grid-system'
-], function($, key, _, sprites, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem){
+], function($, key, _, sprites, Entity, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem){
   var canvas = document.getElementById('drawingboard');
   var ctx = canvas.getContext('2d');
 
@@ -21,98 +22,78 @@ define([
   var rows = height / grid;
   var cols = width / grid;
 
-  ctx.fillStyle = 'rgb(156, 191, 227)';
-  function Human(x, y, element) {
-    this.id = _.uniqueId('e');
+  var Human = Entity.extend({
+    x: 0,
+    y: 0,
+    movement: 32,
+    height: 32,
+    width: 32,
+    spriteId: 'human',
+    element: false
+  });
 
-    this.x = x || 0;
-    this.y = y || 0;
-    this.movement = 32;
+  var Fire = Entity.extend({
+    x: 0,
+    y: 0,
+    height: 32,
+    width: 32,
+    spriteId: 'fire',
+    scaleX: 2,
+    scaleY: 2,
+    speedX: 3
+  });
 
-    this.height = 32;
-    this.width = 32;
+  var Wind = Entity.extend({
+    x: 0,
+    y: 0,
+    height: 32,
+    width: 32,
+    spriteId: 'wind',
+    speedX: 2,
+    speedYCounter: Math.PI,
+    speedYIncrement: Math.PI/16
+  });
 
-    this.spriteId = 'human';
+  var Forest = Entity.extend({
+    x: 0,
+    y: 0,
+    height: 32,
+    width: 32,
+    spriteId: 'forest'
+  });
+  var Mountain = Entity.extend({
+    x: 0,
+    y: 0,
+    height: 32,
+    width: 32,
+    spriteId: 'mountain'
+  });
+  var Grass = Entity.extend({
+    x: 0,
+    y: 0,
+    height: 32,
+    width: 32,
+    spriteId: 'grass'
+  });
+  var River = Entity.extend({
+    x: 0,
+    y: 0,
+    height: 32,
+    width: 32,
+    spriteId: 'river'
+  });
 
-    this.element = element;
-  }
+  var elements = {
+    fire: Fire,
+    wind: Wind
+  };
 
-  function Fire(x, y) {
-    this.id = _.uniqueId('e');
+  var human = new Human({
+    x: 192,
+    y: 288,
+    element: 'wind'
+  });
 
-    this.x = x || 0;
-    this.y = y || 0;
-
-    this.height = 32;
-    this.width = 32;
-
-    this.spriteId = 'fire';
-
-    this.scaleX = 2;
-    this.scaleY = 2;
-    this.speedX = 3;
-
-    this.removeAtX = this.x + 50;
-  }
-
-  function Wind(x, y) {
-    this.id = _.uniqueId('e');
-
-    this.x = x || 0;
-    this.y = y || 0;
-    this.speedX = 2;
-
-    this.speedYCounter = Math.PI;
-    this.speedYIncrement = Math.PI/16;
-
-    this.height = 32;
-    this.width = 32;
-    this.spriteId = 'wind';
-
-    this.removeAtX = this.x + 150;
-  }
-
-  function Forest(x, y) {
-    this.x = x;
-    this.y = y;
-
-    this.height = 32;
-    this.width = 32;
-
-    this.spriteId = 'forest';
-  }
-
-  function Mountain(x, y) {
-    this.x = x;
-    this.y = y;
-
-    this.height = 32;
-    this.width = 32;
-
-    this.spriteId = 'mountain';
-  }
-
-  function Grass(x, y) {
-    this.x = x;
-    this.y = y;
-
-    this.height = 32;
-    this.width = 32;
-
-    this.spriteId = 'grass';
-  }
-
-  function River(x, y) {
-    this.x = x;
-    this.y = y;
-
-    this.height = 32;
-    this.width = 32;
-
-    this.spriteId = 'river';
-  }
-
-  var human = new Human(192, 288, Wind);
   //var human = new Human(192, 288, Wind);
   // movement
   key('w, up', function() {
@@ -130,7 +111,18 @@ define([
 
   // action
   key('enter', function() {
-    entities.push(new human.element(human.x + 10, human.y));
+    if (_.has(elements, human.element)) {
+      var props = {
+        x: human.x + 10,
+        y: human.y
+      };
+      if (human.element === 'fire') {
+        props.removeAtX = props.x + 50;
+      } else if (human.element === 'wind') {
+        props.removeAtX = props.x + 150;
+      }
+      entities.push(new elements[human.element](props));
+    }
   });
 
   // TODO sort entities by z-index? map vs other
@@ -167,7 +159,10 @@ define([
       index = x + y*cols;
       id = map[index];
       var klass = mapObjects[id];
-      var entity = new klass(x * gridX, y * gridY);
+      var entity = new klass({
+        x: x * gridX,
+        y: y * gridY
+      });
       mapEntities.push(entity);
     }
   }
@@ -176,8 +171,8 @@ define([
     human
   ];
 
-
   var frames = 0;
+  ctx.fillStyle = 'rgb(156, 191, 227)';
   function renderer() {
     frames++;
     // background color
