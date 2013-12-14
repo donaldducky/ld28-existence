@@ -4,12 +4,13 @@ define([
   'keymaster',
   'underscore',
   'sprites',
+  'components',
   'entity',
   'systems/sprite-transforming-system',
   'systems/sprite-rendering-system',
   'systems/entity-destroying-system',
   'systems/debug-grid-system'
-], function($, key, _, sprites, Entity, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem){
+], function($, key, _, sprites, c, Entity, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem){
   var canvas = document.getElementById('drawingboard');
   var ctx = canvas.getContext('2d');
 
@@ -22,17 +23,7 @@ define([
   var rows = height / grid;
   var cols = width / grid;
 
-  // components
-  var c = {
-    position: {
-      x: 0,
-      y: 0
-    },
-    size: {
-      height: 32,
-      width: 32
-    }
-  };
+  // A sort of 'base' entity for a sprite
   var SpriteEntity = Entity.extend(c.position, c.size);
 
   var Human = SpriteEntity.extend({
@@ -55,19 +46,6 @@ define([
     speedYIncrement: Math.PI/16
   });
 
-  var Forest = SpriteEntity.extend({
-    spriteId: 'forest'
-  });
-  var Mountain = SpriteEntity.extend({
-    spriteId: 'mountain'
-  });
-  var Grass = SpriteEntity.extend({
-    spriteId: 'grass'
-  });
-  var River = SpriteEntity.extend({
-    spriteId: 'river'
-  });
-
   var elements = {
     fire: Fire,
     wind: Wind
@@ -78,7 +56,6 @@ define([
     y: 288,
     element: 'wind'
   });
-  console.log(human);
 
   //var human = new Human(192, 288, Wind);
   // movement
@@ -133,10 +110,10 @@ define([
 
   var mapEntities = [];
   var mapObjects = {
-    0: Grass,
-    1: Mountain,
-    2: Forest,
-    3: River
+    0: 'grass',
+    1: 'mountain',
+    2: 'forest',
+    3: 'river'
   };
 
   var x, y, index, id;
@@ -144,10 +121,10 @@ define([
     for (y = 0; y < rows; y++) {
       index = x + y*cols;
       id = map[index];
-      var klass = mapObjects[id];
-      var entity = new klass({
+      var entity = new SpriteEntity({
         x: x * gridX,
-        y: y * gridY
+        y: y * gridY,
+        spriteId: mapObjects[id]
       });
       mapEntities.push(entity);
     }
