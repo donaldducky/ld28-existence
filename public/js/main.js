@@ -25,6 +25,5 @@ require.config({
 require([
   'game'
 ], function(game) {
-  console.log('start');
   game();
 });
