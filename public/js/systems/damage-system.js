@@ -69,13 +69,13 @@ define([
         hero.meleeHitY = melee.meleeDirectionY;
         hero.hp -= 2;
 
-        if (hero.hp < 0) {
+        if (hero.hp <= 0) {
           hero.hp = 0;
           hero.dead = true;
           // stop from being controlled
           hero.isPlayer = false;
 
-          console.log('hero died', hero);
+          GameSystem.gameOver();
         }
       }
     });

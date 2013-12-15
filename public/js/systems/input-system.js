@@ -121,6 +121,11 @@ define([
     }
   }
 
+  function reset() {
+    system.GameSystem.reset();
+  }
+
+  // map controls
   key('w', 'map', movePlayerUp);
   key('s', 'map', movePlayerDown);
   key('a', 'map', movePlayerLeft);
@@ -131,8 +136,15 @@ define([
   key('l', 'map', _.throttle(shootProjectileRight, 250));
   key('i', 'map', _.throttle(shootProjectileUp, 250));
   key('k', 'map', _.throttle(shootProjectileDown, 250));
+  key('p', 'map', _.throttle(togglePause, 100));
 
-  key('p', _.throttle(togglePause, 100));
+  // paused
+  key('p', 'pause', _.throttle(togglePause, 100));
+
+  // game-over
+  key('r', 'game-over', _.throttle(reset, 1000));
+
+  // all
   key('backspace', function() {
     // do not go back in browser
     return false;

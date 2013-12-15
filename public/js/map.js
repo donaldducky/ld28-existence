@@ -83,7 +83,6 @@ define([
 
       if (previousState) {
         // restore all entities in their current state
-        console.log('restore previous state', previousState);
         _.each(previousState, function(e) {
           map.GameSystem.addEntity(e);
         });

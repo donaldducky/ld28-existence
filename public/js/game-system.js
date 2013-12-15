@@ -17,7 +17,7 @@ define([
   }
 
   _.extend(GameSystem.prototype, Backbone.Events, {
-    init: function(options) {
+    init: function() {
       map.init(this);
       this.createHero();
       this.loadMap(this.state.mapId);
@@ -27,6 +27,10 @@ define([
       this.setContext('map');
     },
 
+    reset: function() {
+      this.trigger('reset');
+    },
+
     loadMap: function(mapName, options) {
       options = options || {};
       map.load(mapName, options);
@@ -34,7 +38,6 @@ define([
 
     saveMapState: function(mapId, entities) {
       this.state.mapData[mapId] = entities;
-      console.log('game state', this.state);
     },
 
     getMapState: function(mapId) {
@@ -124,10 +127,14 @@ define([
     },
 
     // pause the simulation
-    pause: function() {
+    pause: function(context) {
       this.paused = true;
       this.previousContext = this.getContext();
-      this.setContext('pause');
+      if (context) {
+        this.setContext(context);
+      } else {
+        this.setContext('pause');
+      }
     },
 
     unpause: function() {
@@ -137,6 +144,11 @@ define([
 
     isPaused: function() {
       return this.paused;
+    },
+
+    gameOver: function() {
+      console.log('hero died');
+      this.setContext('game-over');
     }
   });
 
