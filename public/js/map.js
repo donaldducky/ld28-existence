@@ -27,13 +27,14 @@ define([
 
   var isMapLoaded = false;
   var world = {
-    init: function(GameSystem, rows, cols, gridX, gridY, ctx) {
-      map.GameSystem = GameSystem;
-      map.rows = rows;
-      map.cols = cols;
-      map.gridX = gridX;
-      map.gridY = gridY;
-      map.ctx = ctx;
+    init: function(game) {
+      map.GameSystem = game;
+      var settings = game.getSettings();
+      map.rows = settings.rows;
+      map.cols = settings.cols;
+      map.gridX = settings.gridX;
+      map.gridY = settings.gridY;
+      map.ctx = settings.ctx;
     },
 
     load: function(mapName, heroStart) {

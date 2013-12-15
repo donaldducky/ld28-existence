@@ -9,27 +9,30 @@ define([
   'systems/ai-system',
   'systems/hp-bar-system',
   'systems/damage-system',
-  'maps/world',
-  'game-system'
-], function($, _, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, aiSystem, hpBarSystem, damageSystem, map, GameSystem){
-  var canvas = document.getElementById('drawingboard');
-  var ctx = canvas.getContext('2d');
+  'game-system',
+  'settings',
+  'state'
+], function($, _, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, aiSystem, hpBarSystem, damageSystem, GameSystem, settings, state){
+  var ctx = document.getElementById(settings.canvasId).getContext('2d');
+  settings.ctx = ctx;
 
-  var width = 640;
-  var height = 480;
-  var gridX = 32;
-  var gridY = 32;
-  var rows = height / gridX;
-  var cols = width / gridY;
+  var width = settings.width;
+  var height = settings.height;
+  var gridX = settings.gridX;
+  var gridY = settings.gridY;
+  var rows = settings.rows;
+  var cols = settings.cols;
 
-  map.init(GameSystem, rows, cols, gridX, gridY, ctx);
-  GameSystem.init({ map: map });
-  map.load('cave');
+  var options = {
+    settings: settings,
+    state: state
+  };
 
-  var frames = 0;
-  var inputSystem = new InputSystem(GameSystem, map);
+  var game = new GameSystem(options);
+  game.init();
+
+  var inputSystem = new InputSystem(game);
   function renderer() {
-    frames++;
     // background color
     ctx.clearRect(0, 0, width, height);
     ctx.fillRect(0, 0, width, height);
@@ -37,20 +40,20 @@ define([
     // grid
     debugGridSystem(ctx, width, height, gridX, gridY);
 
-    aiSystem(GameSystem);
+    aiSystem(game);
 
-    damageSystem(GameSystem);
+    damageSystem(game);
 
     // transform entities
-    spriteTransformingSystem(GameSystem);
+    spriteTransformingSystem(game);
 
     // render sprites
-    spriteRenderingSystem(GameSystem, ctx);
+    spriteRenderingSystem(game, ctx);
 
-    hpBarSystem(GameSystem, ctx);
+    hpBarSystem(game, ctx);
 
     // remove everything to be destroyed
-    entityDestroyingSystem(GameSystem);
+    entityDestroyingSystem(game);
   }
 
   return renderer;

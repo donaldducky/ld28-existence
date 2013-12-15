@@ -1,20 +1,28 @@
 define([
   'underscore',
   'entity-factory',
-  'data/layers'
-], function(_, entityFactory, LAYERS){
+  'data/layers',
+  'map'
+], function(_, entityFactory, LAYERS, map){
   var state = {
     entities: []
   };
 
-  var map;
+  function GameSystem(options) {
+    _.extend(this, _.pick(options, [ 'settings', 'state' ]));
+  }
 
-  var GameSystem = {
+  GameSystem.prototype = {
     init: function(options) {
-      map = options.map;
-
+      map.init(this);
       this.createHero();
+      map.load(this.state.mapId);
     },
+
+    getSettings: function() {
+      return this.settings;
+    },
+
     createEntity: function(type, properties) {
       return this.addEntity(entityFactory(type, properties));
     },
