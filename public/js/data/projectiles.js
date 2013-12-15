@@ -8,7 +8,7 @@ define([
       return {
         x: entity.x + 10,
         y: entity.y,
-        removeAtX: entity.x + 60,
+        framesLeft: 25,
         layer: LAYERS.projectile
       };
     },
@@ -16,7 +16,7 @@ define([
       return {
         x: entity.x + 10,
         y: entity.y,
-        removeAtX: entity.x + 160,
+        framesLeft: 100,
         layer: LAYERS.projectile
       };
     }

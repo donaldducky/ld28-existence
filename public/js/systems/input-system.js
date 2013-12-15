@@ -58,6 +58,60 @@ define([
     system.GameSystem.createEntity(pName, props);
   }
 
+  function shootProjectileLeft() {
+    var p = system.GameSystem.getHero();
+    var pName = p.element;
+    if (!_.has(PROJECTILES, pName)) {
+      return;
+    }
+
+    var props = PROJECTILES[pName](p);
+    props.speedX = -3;
+    props.x = p.x - 10;
+    system.GameSystem.createEntity(pName, props);
+  }
+
+  function shootProjectileRight() {
+    var p = system.GameSystem.getHero();
+    var pName = p.element;
+    if (!_.has(PROJECTILES, pName)) {
+      return;
+    }
+
+    var props = PROJECTILES[pName](p);
+    props.speedX = 3;
+    props.x = p.x + 10;
+    system.GameSystem.createEntity(pName, props);
+  }
+
+  function shootProjectileUp() {
+    var p = system.GameSystem.getHero();
+    var pName = p.element;
+    if (!_.has(PROJECTILES, pName)) {
+      return;
+    }
+
+    var props = PROJECTILES[pName](p);
+    props.speedX = 0;
+    props.x = p.x;
+    props.speedY = -3;
+    system.GameSystem.createEntity(pName, props);
+  }
+
+  function shootProjectileDown() {
+    var p = system.GameSystem.getHero();
+    var pName = p.element;
+    if (!_.has(PROJECTILES, pName)) {
+      return;
+    }
+
+    var props = PROJECTILES[pName](p);
+    props.speedX = 0;
+    props.x = p.x;
+    props.speedY = 3;
+    system.GameSystem.createEntity(pName, props);
+  }
+
   function InputSystem(GameSystem) {
     system.GameSystem = GameSystem;
     this.init();
@@ -75,6 +129,10 @@ define([
       key('enter', _.throttle(shootProjectile, 250));
       key('x', _.throttle(swapProjectile, 100));
       key('space', _.throttle(performAction, 100));
+      key('j', _.throttle(shootProjectileLeft, 250));
+      key('l', _.throttle(shootProjectileRight, 250));
+      key('i', _.throttle(shootProjectileUp, 250));
+      key('k', _.throttle(shootProjectileDown, 250));
     }
   };
 
