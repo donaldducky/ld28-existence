@@ -17,11 +17,16 @@ define([
     init: function(options) {
       map.init(this);
       this.createHero();
-      map.load(this.state.mapId);
+      this.loadMap(this.state.mapId);
       this.unpause();
 
       // for keybindings
       this.setContext('map');
+    },
+
+    loadMap: function(mapName, options) {
+      options = options || {};
+      map.load(mapName, options);
     },
 
     setContext: function(context) {

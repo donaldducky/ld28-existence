@@ -14,12 +14,12 @@ define([
 
     cave_entrance: function(entity, game, x, y) {
       console.log('cave entrance');
-      game.getMap().load('cave', { x: 11, y: 0 });
+      game.loadMap('cave', { x: 11, y: 0 });
     },
 
     cave_exit: function(entity, game, x, y) {
       console.log('cave exit');
-      game.getMap().load('world', { x: 11, y: 0 });
+      game.loadMap('world', { x: 11, y: 0 });
     }
   };
 

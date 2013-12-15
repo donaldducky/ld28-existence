@@ -79,7 +79,7 @@ define([
 
       // set player
       var hero = map.GameSystem.getHero();
-      heroStart = heroStart || currentMap.heroStart;
+      heroStart = _.defaults(heroStart, currentMap.heroStart);
       this.moveEntityTo(hero, heroStart.x, heroStart.y);
       hero.direction = heroStart.direction;
     },
