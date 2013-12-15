@@ -7,9 +7,10 @@ define([
   'systems/debug-grid-system',
   'systems/input-system',
   'systems/ai-system',
+  'systems/hp-bar-system',
   'maps/world',
   'game-system'
-], function($, _, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, aiSystem, map, GameSystem){
+], function($, _, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, aiSystem, hpBarSystem, map, GameSystem){
   var canvas = document.getElementById('drawingboard');
   var ctx = canvas.getContext('2d');
 
@@ -22,7 +23,7 @@ define([
 
   map.init(GameSystem, rows, cols, gridX, gridY, ctx);
   GameSystem.init({ map: map });
-  map.load('world');
+  map.load('cave');
 
   var frames = 0;
   var inputSystem = new InputSystem(GameSystem, map);
@@ -42,6 +43,8 @@ define([
 
     // render sprites
     spriteRenderingSystem(GameSystem, ctx);
+
+    hpBarSystem(GameSystem, ctx);
 
     // remove everything to be destroyed
     entityDestroyingSystem(GameSystem);

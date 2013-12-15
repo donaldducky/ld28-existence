@@ -21,18 +21,27 @@ define([
     solid: true
   });
 
+  entities.skeleton = entities.sprite.extend({
+    spriteId: 'skeleton',
+    movement: 1,
+    solid: true,
+    enemy: true
+  });
+
   entities.fire = entities.sprite.extend({
     spriteId: 'fire',
     scaleX: 2,
     scaleY: 2,
-    speedX: 3
+    speedX: 3,
+    bullet: true
   });
 
   entities.wind = entities.sprite.extend({
     spriteId: 'wind',
     speedX: 2,
     speedYCounter: Math.PI,
-    speedYIncrement: Math.PI/16
+    speedYIncrement: Math.PI/16,
+    bullet: true
   });
 
   // if type is passed in, return the class

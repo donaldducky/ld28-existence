@@ -25,6 +25,19 @@ define([
         }
         GameSystem.getMap().moveEntityTo(entity, entity.mapX + dx, entity.mapY + dy);
         break;
+      case 'aggressive':
+        var distance = _.sample([ -1, 0, 1 ]);
+        var xOrY = _.random(0, 1);
+        var dx = 0;
+        var dy = 0;
+
+        if (xOrY) {
+          dx = distance;
+        } else {
+          dy = distance;
+        }
+        GameSystem.getMap().moveEntityTo(entity, entity.mapX + dx, entity.mapY + dy);
+        break;
       }
     });
   };
