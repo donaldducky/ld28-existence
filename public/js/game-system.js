@@ -4,11 +4,8 @@ define([
   'data/layers',
   'map'
 ], function(_, entityFactory, LAYERS, map){
-  var state = {
-    entities: []
-  };
-
   function GameSystem(options) {
+    this.entities = [];
     _.extend(this, _.pick(options, [ 'settings', 'state' ]));
   }
 
@@ -27,18 +24,18 @@ define([
       return this.addEntity(entityFactory(type, properties));
     },
     addEntity: function(entity) {
-      state.entities.push(entity);
+      this.entities.push(entity);
       return entity;
     },
     getEntities: function(options) {
       if (options) {
-        return _.where(state.entities, options);
+        return _.where(this.entities, options);
       }
 
-      return state.entities;
+      return this.entities;
     },
     setEntities: function(entities) {
-      state.entities = entities;
+      this.entities = entities;
     },
 
     createHero: function() {
@@ -53,7 +50,7 @@ define([
     },
 
     getHero: function() {
-      return _.find(state.entities, function(e) {
+      return _.find(this.entities, function(e) {
         return e.isPlayer;
       });
     },
