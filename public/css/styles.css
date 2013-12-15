@@ -1,0 +1,53 @@
+#wrap {
+  margin: 0 auto;
+  width: 640px;
+  text-align: center;
+}
+
+#controls {
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px auto;
+  text-align: center;
+}
+
+td.key {
+  background-color: #eee;
+  border-radius: 5px;
+  padding: 2px 5px;
+  text-align: center;
+  font-weight: bold;
+}
+td.description {
+  padding: 2px 5px;
+}
+
+.icon {
+  background-image: url('../images/sprites.png');
+  display: inline-block;
+  height: 32px;
+  width: 32px;
+}
+
+#weapons {
+  text-align: left;
+}
+
+#weapons .icon.selected {
+  border: 1px solid #000;
+  border-radius: 5px;
+  opacity: 1;
+}
+
+#weapons .icon {
+  border: 1px solid #fff;
+  opacity: 0.2;
+}
+
+.icon-fire { background-position: -32px 0; }
+.icon-wind { background-position: -128px 0; }
+
+#sprites {
+/*  display: none;*/
+}

@@ -13,7 +13,7 @@ define([
       ctx.lineTo(width, y);
     }
     ctx.closePath();
-    ctx.strokeStyle = '#eee';
+    ctx.strokeStyle = 'rgba(238, 238, 238, 0.2)';
     ctx.stroke();
   };
 });

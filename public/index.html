@@ -1,27 +1,25 @@
-<style>
-table {
-  border: 1px solid #000;
-  border-radius: 5px;
-  margin-top: 10px;
-  padding: 10px;
-}
-td.key {
-  background-color: #eee;
-  border-radius: 5px;
-  padding: 2px 5px;
-  text-align: center;
-  font-weight: bold;
-}
-td.description {
-  padding: 2px 5px;
-}
-</style>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>LD28: You Only Get One</title>
+  <meta name="author" content="Donald Chea">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div id="wrap">
 <h1>Theme: You Only Get One</h1>
 
 <div>FPS: <span id="fps">0</span></div>
 
+<section id="weapons">
+  <span class="icon icon-fire"></span>
+  <span class="icon icon-wind"></span>
+</section>
+
 <canvas id="drawingboard" width="640" height="480"></canvas>
-<table>
+<table id="controls">
   <tr>
     <th colspan="6">Controls</th>
   </tr>
@@ -45,8 +43,12 @@ td.description {
     <td class="key">l</td><td class="description">shoot right</td>
   </tr>
 </table>
+</div>
 
 <img id="sprites" src="images/sprites.png">
 
 <script src="js/lib/raf.js" data-main="js/main"></script>
 <script src="js/lib/require.js" data-main="js/main"></script>
+
+  </body>
+</html>

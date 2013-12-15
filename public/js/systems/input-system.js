@@ -2,8 +2,9 @@ define([
   'underscore',
   'backbone',
   'keymaster',
-  'data/projectiles'
-], function(_, Backbone, key, PROJECTILES){
+  'data/projectiles',
+  'ui'
+], function(_, Backbone, key, PROJECTILES, ui){
   var system = {};
 
   var movements = {
@@ -57,6 +58,7 @@ define([
     if (projectiles.length > 1) {
       var i = _.indexOf(p.projectiles, p.element);
       p.element = projectiles[i+1] || projectiles[0];
+      ui.selectWeapon(p.element);
     }
   }
 
@@ -134,7 +136,6 @@ define([
   key('l', 'map', _.throttle(shootProjectileRight, 250));
   key('i', 'map', _.throttle(shootProjectileUp, 250));
   key('k', 'map', _.throttle(shootProjectileDown, 250));
-
   key('x', 'map', _.throttle(swapProjectile, 100));
   key('space', 'map', _.throttle(performAction, 100));
   key('p', 'map', _.throttle(togglePause, 100));

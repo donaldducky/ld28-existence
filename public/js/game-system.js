@@ -3,8 +3,9 @@ define([
   'backbone',
   'entity-factory',
   'data/layers',
-  'map'
-], function(_, Backbone, entityFactory, LAYERS, map){
+  'map',
+  'ui'
+], function(_, Backbone, entityFactory, LAYERS, map, ui){
   function GameSystem(options) {
     this.entities = [];
     _.extend(this, _.pick(options, [ 'settings', 'state' ]));
@@ -76,7 +77,7 @@ define([
     },
 
     createHero: function() {
-      this.createEntity('human', {
+      var hero = this.createEntity('human', {
         hp: 10,
         hpMax: 10,
         element: 'fire',
@@ -84,6 +85,10 @@ define([
         layer: LAYERS.unit,
         projectiles: [ 'fire', 'wind' ]
       });
+
+      if (hero.element) {
+        ui.selectWeapon(hero.element);
+      }
     },
 
     getHero: function() {
