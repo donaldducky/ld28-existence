@@ -60,7 +60,7 @@ define([
           // create map tiles
           entity = map.GameSystem.createEntity('sprite', TILES[id]);
           entity.layer = LAYERS.tile;
-          entity.mapTile = true;
+          entity.mapId = currentMap.id;
           this.setEntityAt(entity, x, y);
 
           // create npcs
@@ -69,7 +69,7 @@ define([
             var npc = currentMap.npcs[unitId];
             entity = map.GameSystem.createEntity(npc.entityId, npc.props);
             entity.layer = LAYERS.unit;
-            entity.mapTile = true;
+            entity.mapId = currentMap.id;
             this.setEntityAt(entity, x, y);
           }
         }
@@ -85,7 +85,7 @@ define([
     unload: function() {
       if (isMapLoaded) {
         var entities = _.reject(map.GameSystem.getEntities(), function(e) {
-          return e.mapTile;
+          return e.mapId === currentMap.id;
         });
         map.GameSystem.setEntities(entities);
       }

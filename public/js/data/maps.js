@@ -1,187 +1,27 @@
 define([
-  'underscore'
-], function(_){
+  'underscore',
+  'data/maps/world',
+  'data/maps/cave'
+], function(_, world, cave){
   var maps = {
-    world: {
-      backgroundColor: 'rgb(156, 191, 227)',
-      heroStart: {
-        x: 6,
-        y: 9,
-        direction: 'down'
-      },
-      tiles: [
-        "11111111111141111111",
-        "12000220000000300021",
-        "12000202000000300021",
-        "12220220000000300021",
-        "10000000000000300221",
-        "10000000000000000221",
-        "10000000000000300221",
-        "10000000000000300221",
-        "10000000000000302221",
-        "10000000000000302221",
-        "10000000000000302221",
-        "10006000000000322221",
-        "10000000000000322221",
-        "10000000000000322221",
-        "11111111111111111111"
-      ],
-      triggerTiles: [
-        "00000000000010000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000"
-      ],
-      actionTiles: [
-        "                    ",
-        "                    ",
-        "                    ",
-        "                    ",
-        "                    ",
-        "                    ",
-        "                    ",
-        "                    ",
-        "                    ",
-        "                    ",
-        "                    ",
-        "    a               ",
-        "                    ",
-        "                    ",
-        "                    "
-      ],
-      triggers: {
-        1: function(entity, GameSystem) {
-          console.log('cave entrance');
-          GameSystem.getMap().load('cave', { x: 11, y: 0 });
-        }
-      },
-      actions: {
-        a: function(entity, GameSystem, x, y) {
-          console.log('interacted with tree @', x, y);
-        }
-      }
-    },
-
-    cave: {
-      backgroundColor: 'rgb(200, 200, 200)',
-      heroStart: {
-        x: 5,
-        y: 5,
-        direction: 'down'
-      },
-      tiles: [
-        "11111111111141111111",
-        "15555555555555551111",
-        "15115555555555551111",
-        "15515555555555555111",
-        "15555555555155555551",
-        "15555555551155555551",
-        "15555555551155555551",
-        "15555555555555555551",
-        "11115555555555555551",
-        "15111555555555555551",
-        "15555555555555555551",
-        "11555555555555555551",
-        "11155555555555555551",
-        "11115555555555555551",
-        "11111111111111111111"
-      ],
-      triggerTiles: [
-        "00000000000010000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000",
-        "00000000000000000000"
-      ],
-      unitTiles: [
-        "                    ",
-        "                    ",
-        "                    ",
-        "                    ",
-        "                    ",
-        "                    ",
-        "                    ",
-        "                    ",
-        "                    ",
-        "                    ",
-        "          sssssss   ",
-        "          s   d     ",
-        "          s         ",
-        "          s         ",
-        "                    "
-      ],
-      triggers: {
-        1: function(entity, GameSystem) {
-            console.log('cave exit');
-            GameSystem.getMap().load('world', { x: 11, y: 0 });
-          }
-      },
-      npcs: {
-        d: {
-          entityId: 'dog',
-          props: {
-            ai: 'random',
-            aiTicks: 0,
-            thinkSpeed: 100,
-            action: function(entity, GameSystem) {
-              console.log('woof');
-            }
-          }
-        },
-        s: {
-          entityId: 'skeleton',
-          props: {
-            ai: 'aggressive',
-            aiTicks: 0,
-            thinkSpeed: 100,
-            hp: 5,
-            hpMax: 5
-          }
-        }
-      }
-    }
+    world: world,
+    cave: cave
   };
 
   _.each(maps, function(map, id) {
     // assign id field
-    maps[id].id = id;
-    // join array of strings into a single string for indexing
-    maps[id].tiles = map.tiles.join('');
-    maps[id].triggerTiles = map.triggerTiles.join('');
+    map.id = id;
 
-    if (maps[id].unitTiles) {
-      maps[id].unitTiles = map.unitTiles.join('');
-    } else {
-      maps[id].unitTiles = '';
-    }
-    if (maps[id].actionTiles) {
-      maps[id].actionTiles = map.actionTiles.join('');
-    } else {
-      maps[id].actionTiles = '';
-    }
+    // join array of strings into a single string for indexing
+    // ie. a 1d character array
+    _.each([
+      'tiles', 'triggerTiles', 'unitTiles', 'actionTiles'
+    ], function(key) {
+      map[key] = map[key] ? map[key].join('') : '';
+    });
+
     // what is this crap? TODO use _.defaults
-    maps[id].actions = maps[id].actions || {};
+    map.actions = map.actions || {};
   });
 
   return maps;
