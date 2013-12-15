@@ -22,7 +22,11 @@ define([
       state.entities.push(entity);
       return entity;
     },
-    getEntities: function() {
+    getEntities: function(options) {
+      if (options) {
+        return _.where(state.entities, options);
+      }
+
       return state.entities;
     },
     setEntities: function(entities) {
@@ -46,6 +50,33 @@ define([
 
     getMap: function() {
       return map;
+    },
+
+    playerActionAt: function() {
+      var player = this.getHero();
+      var x = player.mapX;
+      var y = player.mapY;
+      switch(player.direction) {
+      case 'left':
+        x -= 1;
+        break;
+      case 'right':
+        x += 1;
+        break;
+      case 'up':
+        y -= 1;
+        break;
+      case 'down':
+        y += 1;
+        break;
+      default:
+        // prevent default (keymaster)
+        return false;
+      }
+
+      var map = this.getMap();
+      var action = map.getActionAt(x, y);
+      action(player, this, x, y);
     }
   };
 

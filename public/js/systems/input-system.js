@@ -32,29 +32,7 @@ define([
   }
 
   function performAction() {
-    var player = system.GameSystem.getHero();
-    var x = player.mapX;
-    var y = player.mapY;
-    switch(player.direction) {
-    case 'left':
-      x -= 1;
-      break;
-    case 'right':
-      x += 1;
-      break;
-    case 'up':
-      y -= 1;
-      break;
-    case 'down':
-      y += 1;
-      break;
-    default:
-      // prevent default (keymaster)
-      return false;
-    }
-    var map = system.GameSystem.getMap();
-    var action = map.getActionAt(x, y);
-    action(player, system.GameSystem, x, y);
+    system.GameSystem.playerActionAt();
 
     // prevent default (keymaster)
     return false;

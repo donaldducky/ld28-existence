@@ -143,7 +143,10 @@ define([
           props: {
             ai: 'random',
             aiTicks: 0,
-            thinkSpeed: 100
+            thinkSpeed: 100,
+            action: function(entity, GameSystem) {
+              console.log('woof');
+            }
           }
         }
       }
@@ -156,6 +159,7 @@ define([
     // join array of strings into a single string for indexing
     maps[id].tiles = map.tiles.join('');
     maps[id].triggerTiles = map.triggerTiles.join('');
+
     if (maps[id].unitTiles) {
       maps[id].unitTiles = map.unitTiles.join('');
     } else {
@@ -166,6 +170,8 @@ define([
     } else {
       maps[id].actionTiles = '';
     }
+    // what is this crap? TODO use _.defaults
+    maps[id].actions = maps[id].actions || {};
   });
 
   return maps;

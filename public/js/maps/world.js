@@ -15,7 +15,7 @@ define([
 
   // get entities at this position and check if we can go there
   function isSolid(x, y) {
-    var entitiesHere = _.where(map.GameSystem.getEntities(), { mapX: x, mapY: y });
+    var entitiesHere = map.GameSystem.getEntities({ mapX: x, mapY: y });
     return _.find(entitiesHere, function(e) {
       return e.solid;
     });
@@ -105,7 +105,21 @@ define([
       var idx = pointToIndex(x, y);
       var actionId = currentMap.actionTiles[idx];
 
-      return currentMap.actions[actionId] || function(){};
+      // map actions
+      if (currentMap.actions[actionId]) {
+        return currentMap.actions[actionId];
+      }
+
+      // entity actions
+      var entitiesHere = map.GameSystem.getEntities({ mapX: x, mapY: y});
+      var entity = _.find(entitiesHere, function(entity) {
+        return _.has(entity, 'action') && _.isFunction(entity.action);
+      });
+      if (entity) {
+        return entity.action;
+      }
+
+      return function(){};
     },
 
     // try to move the entity from point A to point B
