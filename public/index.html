@@ -1,10 +1,50 @@
 <style>
+table {
+  border: 1px solid #000;
+  border-radius: 5px;
+  margin-top: 10px;
+  padding: 10px;
+}
+td.key {
+  background-color: #eee;
+  border-radius: 5px;
+  padding: 2px 5px;
+  text-align: center;
+  font-weight: bold;
+}
+td.description {
+  padding: 2px 5px;
+}
 </style>
 <h1>Theme: You Only Get One</h1>
 
 <div>FPS: <span id="fps">0</span></div>
 
 <canvas id="drawingboard" width="640" height="480"></canvas>
+<table>
+  <tr>
+    <th colspan="6">Controls</th>
+  </tr>
+  <tr>
+    <td class="key">w</td><td class="description">move up</td>
+    <td class="key">i</td><td class="description">shoot up</td>
+    <td class="key">space</td><td class="description">perform action</td>
+  </tr>
+  <tr>
+    <td class="key">s</td><td class="description">move down</td>
+    <td class="key">k</td><td class="description">shoot down</td>
+    <td class="key">p</td><td class="description">pause</td>
+  </tr>
+  <tr>
+    <td class="key">a</td><td class="description">move left</td>
+    <td class="key">j</td><td class="description">shoot left</td>
+    <td class="key">x</td><td class="description">toggle weapon</td>
+  </tr>
+  <tr>
+    <td class="key">d</td><td class="description">move right</td>
+    <td class="key">l</td><td class="description">shoot right</td>
+  </tr>
+</table>
 
 <img id="sprites" src="images/sprites.png">
 

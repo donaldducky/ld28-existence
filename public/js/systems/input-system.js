@@ -130,12 +130,13 @@ define([
   key('s', 'map', movePlayerDown);
   key('a', 'map', movePlayerLeft);
   key('d', 'map', movePlayerRight);
-  key('x', 'map', _.throttle(swapProjectile, 100));
-  key('space', 'map', _.throttle(performAction, 100));
   key('j', 'map', _.throttle(shootProjectileLeft, 250));
   key('l', 'map', _.throttle(shootProjectileRight, 250));
   key('i', 'map', _.throttle(shootProjectileUp, 250));
   key('k', 'map', _.throttle(shootProjectileDown, 250));
+
+  key('x', 'map', _.throttle(swapProjectile, 100));
+  key('space', 'map', _.throttle(performAction, 100));
   key('p', 'map', _.throttle(togglePause, 100));
 
   // paused
