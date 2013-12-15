@@ -4,7 +4,7 @@ define([
   'underscore'
 ], function(Backbone, _){
   var Entity = function(options) {
-    this.id = _.uniqueId('e');
+    this._id = _.uniqueId('e');
     this.initialize(options);
   };
   _.extend(Entity.prototype, {

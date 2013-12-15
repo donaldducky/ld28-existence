@@ -54,7 +54,10 @@ define([
             y: entity.y + dy * 32,
             enemy: true,
             meleeDirectionX: dx,
-            meleeDirectionY: dy
+            meleeDirectionY: dy,
+            // track which map unit created this
+            // we need to know for removal purposes
+            mapId: entity.mapId
           });
         } else {
           var distance = _.sample([ -1, 0, 1 ]);

@@ -70,7 +70,10 @@ define([
       console.error('unknown entity:', type);
     }
 
-    return new entities[type](args);
+    var entity = new entities[type](args);
+    entity._type = type;
+
+    return entity;
   };
 
   return entityFactory;

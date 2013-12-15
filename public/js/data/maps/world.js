@@ -59,15 +59,10 @@ define([
       "                    "
     ],
     triggers: {
-      1: function(entity, game) {
-        console.log('cave entrance');
-        game.getMap().load('cave', { x: 11, y: 0 });
-      }
+      1: 'cave_entrance'
     },
     actions: {
-      a: function(entity, game, x, y) {
-        console.log('interacted with tree @', x, y);
-      }
+      a: 'world_tree'
     }
   };
 

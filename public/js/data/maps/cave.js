@@ -59,10 +59,7 @@ define([
       "                    "
     ],
     triggers: {
-      1: function(entity, GameSystem) {
-          console.log('cave exit');
-          GameSystem.getMap().load('world', { x: 11, y: 0 });
-        }
+      1: 'cave_exit'
     },
     npcs: {
       d: {
@@ -71,9 +68,7 @@ define([
           ai: 'random',
           aiTicks: 0,
           thinkSpeed: 100,
-          action: function(entity, GameSystem) {
-            console.log('woof');
-          }
+          action: 'woof'
         }
       },
       s: {

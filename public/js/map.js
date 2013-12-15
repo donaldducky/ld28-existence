@@ -2,8 +2,9 @@ define([
   'underscore',
   'data/tiles',
   'data/layers',
-  'data/maps'
-], function(_, TILES, LAYERS, MAPS){
+  'data/maps',
+  'actions'
+], function(_, TILES, LAYERS, MAPS, actions){
   // map a coordinate to a 1d array index
   function pointToIndex(x, y) {
     return x + y * map.cols;
@@ -70,6 +71,7 @@ define([
             entity = map.GameSystem.createEntity(npc.entityId, npc.props);
             entity.layer = LAYERS.unit;
             entity.mapId = currentMap.id;
+            entity.persist = true;
             this.setEntityAt(entity, x, y);
           }
         }
@@ -84,9 +86,23 @@ define([
 
     unload: function() {
       if (isMapLoaded) {
+        var persist = [];
+
+        // remove all entities related to this map
         var entities = _.reject(map.GameSystem.getEntities(), function(e) {
+          if (e.persist) {
+            // TODO do not store dead entities (make persist false on death)
+            console.log('persist', e);
+            persist.push(e);
+          }
+
           return e.mapId === currentMap.id;
         });
+
+        console.log('game state', entities);
+
+        // this is the 'game' state
+        // TODO make this the main state
         map.GameSystem.setEntities(entities);
       }
     },
@@ -98,8 +114,9 @@ define([
     getTriggerAt: function(x, y) {
       var idx = pointToIndex(x, y);
       var triggerId = currentMap.triggerTiles[idx];
+      var actionName = currentMap.triggers[triggerId];
 
-      return currentMap.triggers[triggerId] || function(){};
+      return actions[actionName] || function(){};
     },
 
     getActionAt: function(x, y) {
@@ -108,16 +125,17 @@ define([
 
       // map actions
       if (currentMap.actions[actionId]) {
-        return currentMap.actions[actionId];
+        var actionName = currentMap.actions[actionId];
+        return actions[actionName];
       }
 
       // entity actions
       var entitiesHere = map.GameSystem.getEntities({ mapX: x, mapY: y});
       var entity = _.find(entitiesHere, function(entity) {
-        return _.has(entity, 'action') && _.isFunction(entity.action);
+        return entity.action;
       });
       if (entity) {
-        return entity.action;
+        return actions[entity.action];
       }
 
       return function(){};
@@ -129,7 +147,7 @@ define([
         this.setEntityAt(entity, x, y);
 
         if (entity.isPlayer) {
-          this.getTriggerAt(x, y)(entity, map.GameSystem);
+          this.getTriggerAt(x, y)(entity, map.GameSystem, x, y);
         }
       }
     },
