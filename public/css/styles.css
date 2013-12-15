@@ -32,15 +32,24 @@ td.description {
 
 #weapons {
   text-align: left;
+  padding-bottom: 5px;
 }
 
-#weapons .icon.selected {
-  border: 1px solid #000;
+#weapons .icon-container {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  padding: 5px;
+}
+
+#weapons .icon-container.selected {
+  background-color: #fffee5;
+  border: 1px solid #dad200;
   border-radius: 5px;
   opacity: 1;
 }
 
-#weapons .icon {
+#weapons .icon-container {
   border: 1px solid #fff;
   opacity: 0.2;
 }
