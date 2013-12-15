@@ -127,8 +127,7 @@ define([
       }
 
       var map = this.getMap();
-      var action = map.getActionAt(x, y);
-      action(player, this, x, y);
+      map.triggerAction(player, x, y);
     },
 
     // pause the simulation

@@ -128,14 +128,19 @@ define([
       return actions[actionName] || function(){};
     },
 
-    getActionAt: function(x, y) {
+    triggerAction: function(triggerEntity, x, y) {
       var idx = pointToIndex(x, y);
       var actionId = currentMap.actionTiles[idx];
 
       // map actions
       if (currentMap.actions[actionId]) {
         var actionName = currentMap.actions[actionId];
-        return actions[actionName];
+
+        actions[actionName](triggerEntity, map.GameSystem, x, y);
+
+        // returning here blocks entity actions
+        // TODO maybe need to remove this if entities are on the same spot
+        return;
       }
 
       // entity actions
@@ -144,10 +149,9 @@ define([
         return entity.action;
       });
       if (entity) {
-        return actions[entity.action];
+        actions[entity.action](triggerEntity, map.GameSystem, x, y, entity);
+        return;
       }
-
-      return function(){};
     },
 
     // try to move the entity from point A to point B
