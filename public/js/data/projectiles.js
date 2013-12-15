@@ -10,7 +10,8 @@ define([
         y: entity.y,
         framesLeft: 25,
         layer: LAYERS.projectile,
-        damage: entity.weaponPower || 1
+        damage: entity.weaponPower || 1,
+        damageType: 'fire'
       };
     },
     'wind': function(entity) {
@@ -19,7 +20,8 @@ define([
         y: entity.y,
         framesLeft: 60,
         layer: LAYERS.projectile,
-        damage: entity.weaponPower || 1
+        damage: entity.weaponPower || 1,
+        damageType: 'wind'
       };
     }
   };

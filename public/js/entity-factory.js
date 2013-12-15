@@ -7,7 +7,8 @@ define([
   var entities = {
     // A sort of 'base' entity for a sprite
     sprite: Entity.extend(components.position, components.size),
-    ui: Entity.extend(components.ui)
+    ui: Entity.extend(components.ui),
+    data: Entity.extend(components.data)
   };
 
   entities.human = entities.sprite.extend({
@@ -26,7 +27,8 @@ define([
   entities.treasure = entities.sprite.extend({
     spriteId: 'treasure',
     solid: true,
-    layer: LAYERS.item
+    layer: LAYERS.item,
+    persist: true
   });
 
   entities.skeleton = entities.sprite.extend({

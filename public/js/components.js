@@ -14,6 +14,9 @@ define([
     ui: {
       layer: LAYERS.ui,
       ui: true
+    },
+    data: {
+      persist: true
     }
   };
 

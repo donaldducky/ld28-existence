@@ -1,11 +1,13 @@
 define([
   'underscore',
   'data/maps/world',
-  'data/maps/cave'
-], function(_, world, cave){
+  'data/maps/cave',
+  'data/maps/cave2'
+], function(_, world, cave, cave2){
   var maps = {
     world: world,
-    cave: cave
+    cave: cave,
+    cave2: cave2
   };
 
   _.each(maps, function(map, id) {

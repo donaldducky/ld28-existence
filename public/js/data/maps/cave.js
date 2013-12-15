@@ -106,7 +106,7 @@ define([
           game.getMap().triggerEvent('onLastEnemyKilled');
         }
       },
-      onLastEnemyKilled: function(game) {
+      onLastEnemyKilled: _.once(function(game) {
         var dogs = game.getEntities({ _type: 'dog' });
         _.each(dogs, function(dog) {
           dog.ai = 'random';
@@ -115,7 +115,7 @@ define([
           });
           dog.action = 'woof_saved';
         });
-      }
+      })
     }
   };
 

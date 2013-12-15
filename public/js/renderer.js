@@ -48,6 +48,7 @@ define([
     window.location.href = window.location.href;
   });
   game.init();
+  window.game = game;
 
   var inputSystem = new InputSystem(game);
   function renderer() {

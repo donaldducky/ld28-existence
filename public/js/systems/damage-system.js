@@ -2,6 +2,20 @@ define([
   'underscore',
   'data/layers'
 ], function(_, LAYERS){
+  function calculateDamage(weapon, entity) {
+    var damage = weapon.damage;
+    var damageType = weapon.damageType;
+
+    var modifier = damageType + 'DamageModifier';
+    if (entity[modifier]) {
+      damage *= entity[modifier];
+    } else if (entity.immune) {
+      damage = 0;
+    }
+
+    return damage;
+  }
+
   return function(GameSystem) {
     var enemies = GameSystem.getEntities({ enemy: true });
     enemies = _.filter(enemies, function(enemy) {
@@ -22,7 +36,9 @@ define([
 
         if (cx > minX && cx < maxX && cy > minY && cy < maxY) {
           hit = true;
-          enemy.hp -= bullet.damage;
+
+          // calculate damage
+          enemy.hp -= calculateDamage(bullet, enemy);
 
           // dead
           if (enemy.hp <= 0) {

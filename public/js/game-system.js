@@ -2,13 +2,12 @@ define([
   'underscore',
   'backbone',
   'entity-factory',
-  'data/layers',
   'map',
   'ui'
-], function(_, Backbone, entityFactory, LAYERS, map, ui){
+], function(_, Backbone, entityFactory, map, ui){
   function GameSystem(options) {
     this.entities = [];
-    _.extend(this, _.pick(options, [ 'settings', 'state' ]));
+    _.extend(this, _.pick(options, [ 'settings', 'state', 'hero' ]));
 
     this.state = this.state || {};
     this.state.mapData = this.state.mapData || {};
@@ -20,7 +19,7 @@ define([
   _.extend(GameSystem.prototype, Backbone.Events, {
     init: function() {
       map.init(this);
-      this.createHero();
+      this.createHero(this.state.hero);
       this.loadMap(this.state.mapId);
       this.unpause();
 
@@ -83,16 +82,8 @@ define([
       this.entities = entities;
     },
 
-    createHero: function() {
-      var hero = this.createEntity('human', {
-        hp: 10,
-        hpMax: 10,
-        element: 'wind',
-        isPlayer: true,
-        layer: LAYERS.unit,
-        projectiles: [ 'wind' ],
-        weaponPower: 10
-      });
+    createHero: function(props) {
+      var hero = this.createEntity('human', props);
 
       if (hero.element) {
         _.each(hero.projectiles, function(type) {
@@ -110,8 +101,13 @@ define([
 
     giveHeroWeapon: function(weaponName) {
       var hero = this.getHero();
+      if (_.contains(hero.projectiles, weaponName)) {
+        // already have this weapon
+        return;
+      }
       hero.projectiles.push(weaponName);
       ui.addWeapon(weaponName);
+      this.talk(hero, 'You received ' + weaponName + '!');
     },
 
     getMap: function() {

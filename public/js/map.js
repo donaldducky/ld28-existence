@@ -91,14 +91,10 @@ define([
       // set player
       var hero = map.GameSystem.getHero();
       mapState = _.defaults(mapState, currentMap.heroStart);
-      this.moveEntityTo(hero, mapState.x, mapState.y);
+      this.setEntityAt(hero, mapState.x, mapState.y);
       hero.direction = mapState.direction;
 
       this.triggerEvent('onEnterMap');
-    },
-
-    // adds current mapId to the entity
-    createMapEntity: function(type, properties) {
     },
 
     triggerEvent: function(eventName, options) {
@@ -168,11 +164,11 @@ define([
     },
 
     // try to move the entity from point A to point B
-    moveEntityTo: function(entity, x, y) {
+    moveEntityTo: function(entity, x, y, skipTrigger) {
       if (isOnMap(x, y) && !isSolid(x, y)) {
         this.setEntityAt(entity, x, y);
 
-        if (entity.isPlayer) {
+        if (!skipTrigger && entity.isPlayer) {
           this.getTriggerAt(x, y)(entity, map.GameSystem, x, y);
         }
       }
