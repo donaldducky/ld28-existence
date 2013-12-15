@@ -1,6 +1,7 @@
 /*global define*/
 define([
-], function(){
+  'data/layers'
+], function(LAYERS){
   var components = {
     position: {
       x: 0,
@@ -9,6 +10,10 @@ define([
     size: {
       height: 32,
       width: 32
+    },
+    ui: {
+      layer: LAYERS.ui,
+      ui: true
     }
   };
 

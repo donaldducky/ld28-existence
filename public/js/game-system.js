@@ -153,6 +153,18 @@ define([
     gameOver: function() {
       console.log('hero died');
       this.setContext('game-over');
+    },
+
+    talk: function(entity, message) {
+      var e = this.createEntity('ui', {
+        message: message,
+        x: entity.x,
+        y: entity.y,
+        fgColor: '#000',
+        font: '18px Arial',
+        framesLeft: 50,
+        speedY: -2
+      });
     }
   });
 

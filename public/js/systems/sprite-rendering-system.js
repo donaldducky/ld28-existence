@@ -38,6 +38,17 @@ define([
             entity.x, entity.y, entity.width, entity.height
           );
         }
+      } else if (entity.ui) {
+        var x = entity.x;
+        var y = entity.y;
+        ctx.save();
+        ctx.fillStyle = entity.bgColor;
+        ctx.fillStyle = entity.fgColor;
+        ctx.font = entity.font;
+        ctx.fillText(entity.message, x, y);
+        ctx.strokeText(entity.message, x, y);
+
+        ctx.restore();
       }
     });
   };

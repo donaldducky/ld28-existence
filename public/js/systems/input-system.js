@@ -140,6 +140,13 @@ define([
   key('space', 'map', _.throttle(performAction, 100));
   key('p', 'map', _.throttle(togglePause, 100));
 
+  // message
+  key('space', 'message', _.throttle(function() {
+    togglePause();
+    // prevent page scroll from spacebar
+    return false;
+  }, 100));
+
   // paused
   key('p', 'pause', _.throttle(togglePause, 100));
 

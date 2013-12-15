@@ -6,7 +6,8 @@ define([
 ], function(Entity, components, LAYERS){
   var entities = {
     // A sort of 'base' entity for a sprite
-    sprite: Entity.extend(components.position, components.size)
+    sprite: Entity.extend(components.position, components.size),
+    ui: Entity.extend(components.ui)
   };
 
   entities.human = entities.sprite.extend({
