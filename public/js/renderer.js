@@ -1,6 +1,7 @@
 define([
   'jquery',
   'underscore',
+  'systems/background-system',
   'systems/sprite-transforming-system',
   'systems/sprite-rendering-system',
   'systems/entity-destroying-system',
@@ -12,7 +13,7 @@ define([
   'game-system',
   'settings',
   'state'
-], function($, _, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, aiSystem, hpBarSystem, damageSystem, GameSystem, settings, state){
+], function($, _, backgroundSystem, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, aiSystem, hpBarSystem, damageSystem, GameSystem, settings, state){
   var ctx = document.getElementById(settings.canvasId).getContext('2d');
   settings.ctx = ctx;
 
@@ -33,9 +34,12 @@ define([
 
   var inputSystem = new InputSystem(game);
   function renderer() {
+    if (game.isPaused()) {
+      return;
+    }
+
     // background color
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillRect(0, 0, width, height);
+    backgroundSystem(game);
 
     // grid
     debugGridSystem(ctx, width, height, gridX, gridY);

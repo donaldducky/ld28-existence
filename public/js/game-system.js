@@ -1,19 +1,36 @@
 define([
   'underscore',
+  'backbone',
   'entity-factory',
   'data/layers',
   'map'
-], function(_, entityFactory, LAYERS, map){
+], function(_, Backbone, entityFactory, LAYERS, map){
   function GameSystem(options) {
     this.entities = [];
     _.extend(this, _.pick(options, [ 'settings', 'state' ]));
+
+    // set initial pause state
+    this.pause();
   }
 
-  GameSystem.prototype = {
+  _.extend(GameSystem.prototype, Backbone.Events, {
     init: function(options) {
       map.init(this);
       this.createHero();
       map.load(this.state.mapId);
+      this.unpause();
+
+      // for keybindings
+      this.setContext('map');
+    },
+
+    setContext: function(context) {
+      this.context = context;
+      this.trigger('context', context);
+    },
+
+    getContext: function() {
+      return this.context;
     },
 
     getSettings: function() {
@@ -87,8 +104,24 @@ define([
       var map = this.getMap();
       var action = map.getActionAt(x, y);
       action(player, this, x, y);
+    },
+
+    // pause the simulation
+    pause: function() {
+      this.paused = true;
+      this.previousContext = this.getContext();
+      this.setContext('pause');
+    },
+
+    unpause: function() {
+      this.paused = false;
+      this.setContext(this.previousContext);
+    },
+
+    isPaused: function() {
+      return this.paused;
     }
-  };
+  });
 
   return GameSystem;
 });

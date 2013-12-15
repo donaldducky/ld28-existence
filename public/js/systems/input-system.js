@@ -1,8 +1,9 @@
 define([
   'underscore',
+  'backbone',
   'keymaster',
   'data/projectiles'
-], function(_, key, PROJECTILES){
+], function(_, Backbone, key, PROJECTILES){
   var system = {};
 
   var movements = {
@@ -111,28 +112,42 @@ define([
     shootProjectile('down');
   }
 
-  function InputSystem(GameSystem) {
-    system.GameSystem = GameSystem;
+  function togglePause() {
+    if (system.GameSystem.isPaused()) {
+      system.GameSystem.unpause();
+    } else {
+      system.GameSystem.pause();
+    }
+  }
+
+  key('w', 'map', movePlayerUp);
+  key('s', 'map', movePlayerDown);
+  key('a', 'map', movePlayerLeft);
+  key('d', 'map', movePlayerRight);
+  key('x', 'map', _.throttle(swapProjectile, 100));
+  key('space', 'map', _.throttle(performAction, 100));
+  key('j', 'map', _.throttle(shootProjectileLeft, 250));
+  key('l', 'map', _.throttle(shootProjectileRight, 250));
+  key('i', 'map', _.throttle(shootProjectileUp, 250));
+  key('k', 'map', _.throttle(shootProjectileDown, 250));
+
+  key('p', _.throttle(togglePause, 100));
+
+  function InputSystem(game) {
+    system.GameSystem = game;
     this.init();
   }
 
-  InputSystem.prototype = {
+  _.extend(InputSystem.prototype, Backbone.Events, {
     init: function() {
-      this.setContext();
+      this.setContext(system.GameSystem.getContext());
+
+      this.listenTo(system.GameSystem, 'context', this.setContext);
     },
-    setContext: function() {
-      key('w', movePlayerUp);
-      key('s', movePlayerDown);
-      key('a', movePlayerLeft);
-      key('d', movePlayerRight);
-      key('x', _.throttle(swapProjectile, 100));
-      key('space', _.throttle(performAction, 100));
-      key('j', _.throttle(shootProjectileLeft, 250));
-      key('l', _.throttle(shootProjectileRight, 250));
-      key('i', _.throttle(shootProjectileUp, 250));
-      key('k', _.throttle(shootProjectileDown, 250));
+    setContext: function(context) {
+      key.setScope(context);
     }
-  };
+  });
 
   return InputSystem;
 });
