@@ -96,21 +96,17 @@ define([
             dog.ai = 'random';
           }
         });
-        console.log('entered map');
       },
       onEnemyKilled: function(game, options) {
-        console.log('enemy killed', options.enemy);
         var enemies = game.getEntities({ enemy: true });
         var enemiesLeft = _.reject(enemies, function(enemy) {
           return enemy.dead;
         });
-        console.log('enemies left', enemiesLeft.length);
         if (enemiesLeft.length === 0) {
           game.getMap().triggerEvent('onLastEnemyKilled');
         }
       },
       onLastEnemyKilled: function(game) {
-        console.log('last enemy was killed');
         var dogs = game.getEntities({ _type: 'dog' });
         _.each(dogs, function(dog) {
           dog.ai = 'random';

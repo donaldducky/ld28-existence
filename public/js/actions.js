@@ -44,7 +44,8 @@ define([
     }, 100),
 
     woof_treasure: _.once(function(triggerEntity, game, x, y, entity) {
-      console.log('open treasure');
+      game.giveHeroWeapon('fire');
+      entity.spriteId = 'treasure_open';
     }),
 
     //
@@ -58,12 +59,10 @@ define([
     // traveling
     //
     cave_entrance: function(triggerEntity, game, x, y) {
-      console.log('cave entrance');
       game.loadMap('cave', { x: 11, y: 0 });
     },
 
     cave_exit: function(triggerEntity, game, x, y) {
-      console.log('cave exit');
       game.loadMap('world', { x: 11, y: 0 });
     }
   };

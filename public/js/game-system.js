@@ -87,14 +87,17 @@ define([
       var hero = this.createEntity('human', {
         hp: 10,
         hpMax: 10,
-        element: 'fire',
+        element: 'wind',
         isPlayer: true,
         layer: LAYERS.unit,
-        projectiles: [ 'fire', 'wind' ],
+        projectiles: [ 'wind' ],
         weaponPower: 10
       });
 
       if (hero.element) {
+        _.each(hero.projectiles, function(type) {
+          ui.addWeapon(type);
+        });
         ui.selectWeapon(hero.element);
       }
     },
@@ -103,6 +106,12 @@ define([
       return _.find(this.entities, function(e) {
         return e.isPlayer;
       });
+    },
+
+    giveHeroWeapon: function(weaponName) {
+      var hero = this.getHero();
+      hero.projectiles.push(weaponName);
+      ui.addWeapon(weaponName);
     },
 
     getMap: function() {
@@ -159,7 +168,6 @@ define([
     },
 
     gameOver: function() {
-      console.log('hero died');
       this.setContext('game-over');
     },
 

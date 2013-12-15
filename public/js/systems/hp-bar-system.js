@@ -24,7 +24,6 @@ define([
       // hp percent * max width of the bar
       var hpBarWidth = Math.round((entity.hp / entity.hpMax) * width);
       ctx.fillRect(x, y, hpBarWidth, height);
-      //console.log(entity.hp);
     });
 
     ctx.restore();
