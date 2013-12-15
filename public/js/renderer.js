@@ -8,9 +8,10 @@ define([
   'systems/input-system',
   'systems/ai-system',
   'systems/hp-bar-system',
+  'systems/damage-system',
   'maps/world',
   'game-system'
-], function($, _, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, aiSystem, hpBarSystem, map, GameSystem){
+], function($, _, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, aiSystem, hpBarSystem, damageSystem, map, GameSystem){
   var canvas = document.getElementById('drawingboard');
   var ctx = canvas.getContext('2d');
 
@@ -37,6 +38,8 @@ define([
     debugGridSystem(ctx, width, height, gridX, gridY);
 
     aiSystem(GameSystem);
+
+    damageSystem(GameSystem);
 
     // transform entities
     spriteTransformingSystem(GameSystem);

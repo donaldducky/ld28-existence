@@ -23,6 +23,7 @@ define([
 
   entities.skeleton = entities.sprite.extend({
     spriteId: 'skeleton',
+    deadSpriteId: 'skeleton_dead',
     movement: 1,
     solid: true,
     enemy: true

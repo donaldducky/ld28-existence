@@ -3,8 +3,9 @@ define([
   // render layers (ie. zindex)
   var layers = {
     tile: 1,
-    unit: 2,
-    projectile: 3
+    dead: 2,
+    unit: 5,
+    projectile: 10
   };
 
   return layers;
