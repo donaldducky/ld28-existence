@@ -12,8 +12,9 @@ define([
   'systems/damage-system',
   'game-system',
   'settings',
-  'state'
-], function($, _, backgroundSystem, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, aiSystem, hpBarSystem, damageSystem, GameSystem, settings, state){
+  'state',
+  'screens/pause'
+], function($, _, backgroundSystem, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, aiSystem, hpBarSystem, damageSystem, GameSystem, settings, state, PauseScreen){
   var ctx = document.getElementById(settings.canvasId).getContext('2d');
   settings.ctx = ctx;
 
@@ -29,8 +30,16 @@ define([
     state: state
   };
 
+  var pauseScreen = new PauseScreen();
+
   var game = new GameSystem(options);
+  game.on('context', function(context) {
+    if (context === 'pause') {
+      pauseScreen.render(ctx, width, height);
+    }
+  });
   game.init();
+
 
   var inputSystem = new InputSystem(game);
   function renderer() {
