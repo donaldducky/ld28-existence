@@ -22,7 +22,7 @@ define([
 
         if (cx > minX && cx < maxX && cy > minY && cy < maxY) {
           hit = true;
-          enemy.hp -= 1;
+          enemy.hp -= bullet.damage;
 
           // dead
           if (enemy.hp <= 0) {
@@ -35,6 +35,8 @@ define([
             if (enemy.deadSpriteId) {
               enemy.spriteId = enemy.deadSpriteId;
             }
+
+            GameSystem.getMap().triggerEvent('onEnemyKilled', { enemy: enemy });
           }
         }
       });

@@ -23,6 +23,12 @@ define([
     solid: true
   });
 
+  entities.treasure = entities.sprite.extend({
+    spriteId: 'treasure',
+    solid: true,
+    layer: LAYERS.item
+  });
+
   entities.skeleton = entities.sprite.extend({
     spriteId: 'skeleton',
     deadSpriteId: 'skeleton_dead',

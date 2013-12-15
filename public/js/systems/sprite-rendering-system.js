@@ -4,6 +4,8 @@ define([
   'sprites'
 ], function(_, sprites){
   return function(GameSystem, ctx) {
+    var canvasWidth = GameSystem.getSettings().width;
+
     _.chain(GameSystem.getEntities()).sortBy(function(e) {
       return e.layer;
     }).each(function(entity) {
@@ -42,11 +44,12 @@ define([
         var x = entity.x;
         var y = entity.y;
         ctx.save();
-        ctx.fillStyle = entity.bgColor;
         ctx.fillStyle = entity.fgColor;
         ctx.font = entity.font;
-        ctx.fillText(entity.message, x, y);
-        ctx.strokeText(entity.message, x, y);
+        if (x + 150 > canvasWidth) {
+          x = canvasWidth - 150;
+        }
+        ctx.fillText(entity.message, x, y, 150);
 
         ctx.restore();
       }

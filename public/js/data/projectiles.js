@@ -9,7 +9,8 @@ define([
         x: entity.x + 10,
         y: entity.y,
         framesLeft: 25,
-        layer: LAYERS.projectile
+        layer: LAYERS.projectile,
+        damage: entity.weaponPower || 1
       };
     },
     'wind': function(entity) {
@@ -17,7 +18,8 @@ define([
         x: entity.x + 10,
         y: entity.y,
         framesLeft: 60,
-        layer: LAYERS.projectile
+        layer: LAYERS.projectile,
+        damage: entity.weaponPower || 1
       };
     }
   };

@@ -1,7 +1,7 @@
 define([
 ], function(){
   var state = {
-    mapId: 'world'
+    mapId: 'cave'
   };
 
   return state;

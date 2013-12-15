@@ -61,6 +61,13 @@ define([
     createEntity: function(type, properties) {
       return this.addEntity(entityFactory(type, properties));
     },
+
+    createMapEntity: function(type, properties) {
+      properties.mapId = this.getMap().getCurrentMap().id;
+
+      return this.createEntity(type, properties);
+    },
+
     addEntity: function(entity) {
       this.entities.push(entity);
       return entity;
@@ -83,7 +90,8 @@ define([
         element: 'fire',
         isPlayer: true,
         layer: LAYERS.unit,
-        projectiles: [ 'fire', 'wind' ]
+        projectiles: [ 'fire', 'wind' ],
+        weaponPower: 10
       });
 
       if (hero.element) {
@@ -155,8 +163,9 @@ define([
       this.setContext('game-over');
     },
 
-    talk: function(entity, message) {
-      var e = this.createEntity('ui', {
+    talk: function(entity, message, options) {
+      options = options || {};
+      var e = this.createEntity('ui', _.extend({
         message: message,
         x: entity.x,
         y: entity.y,
@@ -164,7 +173,7 @@ define([
         font: '18px Arial',
         framesLeft: 50,
         speedY: -2
-      });
+      }, options));
     }
   });
 

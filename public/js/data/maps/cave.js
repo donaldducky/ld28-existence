@@ -1,5 +1,6 @@
 define([
-], function(){
+  'underscore'
+], function(_){
   var cave = {
     backgroundColor: 'rgb(200, 200, 200)',
     heroStart: {
@@ -80,6 +81,44 @@ define([
           hp: 5,
           hpMax: 5
         }
+      }
+    },
+    events: {
+      onEnterMap: function(game) {
+        var skeletons = game.getEntities({ _type: 'skeleton' });
+        var hasEnemies = skeletons.length > 0;
+
+        var dogs = game.getEntities({ _type: 'dog' });
+        _.each(dogs, function(dog) {
+          if (hasEnemies) {
+            dog.ai = 'distressed';
+          } else {
+            dog.ai = 'random';
+          }
+        });
+        console.log('entered map');
+      },
+      onEnemyKilled: function(game, options) {
+        console.log('enemy killed', options.enemy);
+        var enemies = game.getEntities({ enemy: true });
+        var enemiesLeft = _.reject(enemies, function(enemy) {
+          return enemy.dead;
+        });
+        console.log('enemies left', enemiesLeft.length);
+        if (enemiesLeft.length === 0) {
+          game.getMap().triggerEvent('onLastEnemyKilled');
+        }
+      },
+      onLastEnemyKilled: function(game) {
+        console.log('last enemy was killed');
+        var dogs = game.getEntities({ _type: 'dog' });
+        _.each(dogs, function(dog) {
+          dog.ai = 'random';
+          game.talk(dog, 'woof, you saved me!', {
+            framesLeft: 100
+          });
+          dog.action = 'woof_saved';
+        });
       }
     }
   };

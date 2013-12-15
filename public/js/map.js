@@ -93,6 +93,19 @@ define([
       mapState = _.defaults(mapState, currentMap.heroStart);
       this.moveEntityTo(hero, mapState.x, mapState.y);
       hero.direction = mapState.direction;
+
+      this.triggerEvent('onEnterMap');
+    },
+
+    // adds current mapId to the entity
+    createMapEntity: function(type, properties) {
+    },
+
+    triggerEvent: function(eventName, options) {
+      if (currentMap.events && currentMap.events[eventName]) {
+        options = options || {};
+        currentMap.events[eventName](map.GameSystem, options);
+      }
     },
 
     unload: function() {
@@ -173,6 +186,10 @@ define([
       // set canvas position
       entity.x = x * map.gridX;
       entity.y = y * map.gridY;
+    },
+
+    getCurrentMap: function() {
+      return currentMap;
     }
   };
 
