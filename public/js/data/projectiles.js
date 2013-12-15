@@ -16,7 +16,7 @@ define([
       return {
         x: entity.x + 10,
         y: entity.y,
-        framesLeft: 100,
+        framesLeft: 60,
         layer: LAYERS.projectile
       };
     }

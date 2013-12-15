@@ -35,6 +35,8 @@ define([
 
     createHero: function() {
       this.createEntity('human', {
+        hp: 10,
+        hpMax: 10,
         element: 'fire',
         isPlayer: true,
         layer: LAYERS.unit,
@@ -54,6 +56,9 @@ define([
 
     playerActionAt: function() {
       var player = this.getHero();
+      if (!player) {
+        return;
+      }
       var x = player.mapX;
       var y = player.mapY;
       switch(player.direction) {

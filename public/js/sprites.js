@@ -23,7 +23,9 @@ define([
     down: { x: 32*3, y: 32*2, width: 32, height: 32 },
 
     skeleton: { x: 0, y: 32*3, width: 32, height: 32 },
-    skeleton_dead: { x: 32, y: 32*3, width: 32, height: 32 }
+    skeleton_dead: { x: 32, y: 32*3, width: 32, height: 32 },
+    punch: { x: 32*2, y: 32*3, width: 32, height: 32 },
+    blood: { x: 32*3, y: 32*3, width: 32, height: 32 }
   };
 
   return sprites;

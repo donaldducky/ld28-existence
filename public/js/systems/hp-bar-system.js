@@ -5,12 +5,17 @@ define([
   return function(GameSystem, ctx) {
     ctx.save();
 
-    ctx.fillStyle = 'rgb(255,0,0)';
+    ctx.globalAlpha = 0.8;
 
     _.chain(GameSystem.getEntities()).filter(function(entity) {
       // hp > 0
       return entity.hp && entity.hpMax;
     }).each(function(entity) {
+      if (entity.enemy) {
+        ctx.fillStyle = 'rgb(255,0,0)';
+      } else {
+        ctx.fillStyle = 'rgb(0,255,0)';
+      }
       var padding = 5;
       var x = entity.x + padding;
       var y = entity.y + entity.height - padding;

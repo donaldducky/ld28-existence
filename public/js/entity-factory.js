@@ -1,8 +1,9 @@
 /*global define*/
 define([
   'entity',
-  'components'
-], function(Entity, components){
+  'components',
+  'data/layers'
+], function(Entity, components, LAYERS){
   var entities = {
     // A sort of 'base' entity for a sprite
     sprite: Entity.extend(components.position, components.size)
@@ -43,6 +44,19 @@ define([
     speedYCounter: Math.PI,
     speedYIncrement: Math.PI/16,
     bullet: true
+  });
+
+  entities.punch = entities.sprite.extend({
+    spriteId: 'punch',
+    melee: true,
+    layer: LAYERS.projectile,
+    framesLeft: 35
+  });
+
+  entities.blood = entities.sprite.extend({
+    spriteId: 'blood',
+    layer: LAYERS.projectile,
+    framesLeft: 25
   });
 
   // if type is passed in, return the class

@@ -10,21 +10,34 @@ define([
       if (entity.spriteId) {
         var sprite;
 
-        if (entity.direction) {
-          sprite = sprites[entity.direction];
+        if (entity.dead) {
+          ctx.globalAlpha = 0.5;
+
+          sprite = sprites[entity.spriteId];
+          ctx.drawImage(
+            sprites._image,
+            sprite.x, sprite.y, sprite.width, sprite.height,
+            entity.x, entity.y, entity.width, entity.height
+          );
+
+          ctx.globalAlpha = 1;
+        } else {
+          if (entity.direction) {
+            sprite = sprites[entity.direction];
+            ctx.drawImage(
+              sprites._image,
+              sprite.x, sprite.y, sprite.width, sprite.height,
+              entity.x, entity.y, entity.width, entity.height
+            );
+          }
+
+          sprite = sprites[entity.spriteId];
           ctx.drawImage(
             sprites._image,
             sprite.x, sprite.y, sprite.width, sprite.height,
             entity.x, entity.y, entity.width, entity.height
           );
         }
-
-        sprite = sprites[entity.spriteId];
-        ctx.drawImage(
-          sprites._image,
-          sprite.x, sprite.y, sprite.width, sprite.height,
-          entity.x, entity.y, entity.width, entity.height
-        );
       }
     });
   };

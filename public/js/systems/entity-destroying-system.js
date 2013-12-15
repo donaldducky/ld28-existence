@@ -4,7 +4,7 @@ define([
 ], function(_){
   return function(GameSystem) {
     _.each(GameSystem.getEntities(), function(entity) {
-      if (_.has(entity, 'framesLeft')) {
+      if (entity.framesLeft) {
         entity.framesLeft--;
         if (entity.framesLeft <= 0) {
           entity.destroyed = true;

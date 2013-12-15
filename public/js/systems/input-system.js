@@ -5,30 +5,37 @@ define([
 ], function(_, key, PROJECTILES){
   var system = {};
 
+  var movements = {
+    up: { x: 0, y: -1 },
+    down: { x: 0, y: 1 },
+    left: { x: -1, y: 0 },
+    right: { x: 1, y: 0 }
+  };
+
   function movePlayerUp() {
-    var player = movePlayer(0, -1);
-    player.direction = 'up';
+    movePlayer('up');
   }
 
   function movePlayerDown() {
-    var player = movePlayer(0, 1);
-    player.direction = 'down';
+    movePlayer('down');
   }
 
   function movePlayerLeft() {
-    var player = movePlayer(-1, 0);
-    player.direction = 'left';
+    movePlayer('left');
   }
 
   function movePlayerRight() {
-    var player = movePlayer(1, 0);
-    player.direction = 'right';
+    movePlayer('right');
   }
 
-  function movePlayer(dx, dy) {
+  function movePlayer(direction) {
     var p = system.GameSystem.getHero();
-    system.GameSystem.getMap().moveEntityTo(p, p.mapX + dx, p.mapY + dy);
-    return p;
+    if (!p) {
+      return;
+    }
+
+    var d = movements[direction];
+    system.GameSystem.getMap().moveEntityTo(p, p.mapX + d.x, p.mapY + d.y);
   }
 
   function performAction() {
@@ -40,6 +47,10 @@ define([
 
   function swapProjectile() {
     var p = system.GameSystem.getHero();
+    if (!p) {
+      return;
+    }
+
     var projectiles = p.projectiles;
     if (projectiles.length > 1) {
       var i = _.indexOf(p.projectiles, p.element);
@@ -47,69 +58,57 @@ define([
     }
   }
 
-  function shootProjectile() {
+  function shootProjectile(direction) {
     var p = system.GameSystem.getHero();
+    if (!p) {
+      return;
+    }
+
     var pName = p.element;
     if (!_.has(PROJECTILES, pName)) {
       return;
     }
 
     var props = PROJECTILES[pName](p);
+
+    switch (direction) {
+    case 'left':
+      props.speedX = -3;
+      props.x = p.x - 10;
+      break;
+    case 'right':
+      props.speedX = 3;
+      props.x = p.x + 10;
+      break;
+    case 'up':
+      props.speedX = 0;
+      props.x = p.x;
+      props.speedY = -3;
+      break;
+    case 'down':
+      props.speedX = 0;
+      props.x = p.x;
+      props.speedY = 3;
+      break;
+    }
+
     system.GameSystem.createEntity(pName, props);
   }
 
   function shootProjectileLeft() {
-    var p = system.GameSystem.getHero();
-    var pName = p.element;
-    if (!_.has(PROJECTILES, pName)) {
-      return;
-    }
-
-    var props = PROJECTILES[pName](p);
-    props.speedX = -3;
-    props.x = p.x - 10;
-    system.GameSystem.createEntity(pName, props);
+    shootProjectile('left');
   }
 
   function shootProjectileRight() {
-    var p = system.GameSystem.getHero();
-    var pName = p.element;
-    if (!_.has(PROJECTILES, pName)) {
-      return;
-    }
-
-    var props = PROJECTILES[pName](p);
-    props.speedX = 3;
-    props.x = p.x + 10;
-    system.GameSystem.createEntity(pName, props);
+    shootProjectile('right');
   }
 
   function shootProjectileUp() {
-    var p = system.GameSystem.getHero();
-    var pName = p.element;
-    if (!_.has(PROJECTILES, pName)) {
-      return;
-    }
-
-    var props = PROJECTILES[pName](p);
-    props.speedX = 0;
-    props.x = p.x;
-    props.speedY = -3;
-    system.GameSystem.createEntity(pName, props);
+    shootProjectile('up');
   }
 
   function shootProjectileDown() {
-    var p = system.GameSystem.getHero();
-    var pName = p.element;
-    if (!_.has(PROJECTILES, pName)) {
-      return;
-    }
-
-    var props = PROJECTILES[pName](p);
-    props.speedX = 0;
-    props.x = p.x;
-    props.speedY = 3;
-    system.GameSystem.createEntity(pName, props);
+    shootProjectile('down');
   }
 
   function InputSystem(GameSystem) {
@@ -126,7 +125,6 @@ define([
       key('s', movePlayerDown);
       key('a', movePlayerLeft);
       key('d', movePlayerRight);
-      key('enter', _.throttle(shootProjectile, 250));
       key('x', _.throttle(swapProjectile, 100));
       key('space', _.throttle(performAction, 100));
       key('j', _.throttle(shootProjectileLeft, 250));
