@@ -133,6 +133,10 @@ define([
   key('k', 'map', _.throttle(shootProjectileDown, 250));
 
   key('p', _.throttle(togglePause, 100));
+  key('backspace', function() {
+    // do not go back in browser
+    return false;
+  });
 
   function InputSystem(game) {
     system.GameSystem = game;
