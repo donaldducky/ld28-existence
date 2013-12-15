@@ -37,6 +37,7 @@ define([
 
     var d = movements[direction];
     system.GameSystem.getMap().moveEntityTo(p, p.mapX + d.x, p.mapY + d.y);
+    p.direction = direction;
   }
 
   function performAction() {
