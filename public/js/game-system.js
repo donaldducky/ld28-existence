@@ -9,6 +9,9 @@ define([
     this.entities = [];
     _.extend(this, _.pick(options, [ 'settings', 'state' ]));
 
+    this.state = this.state || {};
+    this.state.mapData = this.state.mapData || {};
+
     // set initial pause state
     this.pause();
   }
@@ -27,6 +30,15 @@ define([
     loadMap: function(mapName, options) {
       options = options || {};
       map.load(mapName, options);
+    },
+
+    saveMapState: function(mapId, entities) {
+      this.state.mapData[mapId] = entities;
+      console.log('game state', this.state);
+    },
+
+    getMapState: function(mapId) {
+      return this.state.mapData[mapId] || false;
     },
 
     setContext: function(context) {

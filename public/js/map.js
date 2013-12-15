@@ -38,7 +38,7 @@ define([
       map.ctx = settings.ctx;
     },
 
-    load: function(mapName, heroStart) {
+    load: function(mapName, mapState) {
       this.unload();
 
       currentMap = MAPS[mapName] || false;
@@ -50,6 +50,8 @@ define([
 
       // set new background color
       map.ctx.fillStyle = currentMap.backgroundColor;
+
+      var previousState = map.GameSystem.getMapState(currentMap.id);
 
       // create map entities
       var x, y, index, id, entity;
@@ -64,24 +66,34 @@ define([
           entity.mapId = currentMap.id;
           this.setEntityAt(entity, x, y);
 
-          // create npcs
-          var unitId = currentMap.unitTiles[index];
-          if (unitId && currentMap.npcs[unitId]) {
-            var npc = currentMap.npcs[unitId];
-            entity = map.GameSystem.createEntity(npc.entityId, npc.props);
-            entity.layer = LAYERS.unit;
-            entity.mapId = currentMap.id;
-            entity.persist = true;
-            this.setEntityAt(entity, x, y);
+          if (!previousState) {
+            // create npcs
+            var unitId = currentMap.unitTiles[index];
+            if (unitId && currentMap.npcs[unitId]) {
+              var npc = currentMap.npcs[unitId];
+              entity = map.GameSystem.createEntity(npc.entityId, npc.props);
+              entity.layer = LAYERS.unit;
+              entity.mapId = currentMap.id;
+              entity.persist = true;
+              this.setEntityAt(entity, x, y);
+            }
           }
         }
       }
 
+      if (previousState) {
+        // restore all entities in their current state
+        console.log('restore previous state', previousState);
+        _.each(previousState, function(e) {
+          map.GameSystem.addEntity(e);
+        });
+      }
+
       // set player
       var hero = map.GameSystem.getHero();
-      heroStart = _.defaults(heroStart, currentMap.heroStart);
-      this.moveEntityTo(hero, heroStart.x, heroStart.y);
-      hero.direction = heroStart.direction;
+      mapState = _.defaults(mapState, currentMap.heroStart);
+      this.moveEntityTo(hero, mapState.x, mapState.y);
+      hero.direction = mapState.direction;
     },
 
     unload: function() {
@@ -91,15 +103,13 @@ define([
         // remove all entities related to this map
         var entities = _.reject(map.GameSystem.getEntities(), function(e) {
           if (e.persist) {
-            // TODO do not store dead entities (make persist false on death)
-            console.log('persist', e);
             persist.push(e);
           }
 
           return e.mapId === currentMap.id;
         });
 
-        console.log('game state', entities);
+        map.GameSystem.saveMapState(currentMap.id, persist);
 
         // this is the 'game' state
         // TODO make this the main state

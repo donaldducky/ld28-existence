@@ -31,6 +31,7 @@ define([
             enemy.solid = false;
             enemy.layer = LAYERS.dead;
             enemy.dead = true;
+            enemy.persist = false;
             if (enemy.deadSpriteId) {
               enemy.spriteId = enemy.deadSpriteId;
             }
