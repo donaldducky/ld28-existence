@@ -171,6 +171,10 @@ define([
       this.setContext('victory');
     },
 
+    failVictory: function() {
+      this.setContext('fail-victory');
+    },
+
     talk: function(entity, message, options) {
       options = options || {};
       var e = this.createEntity('ui', _.extend({

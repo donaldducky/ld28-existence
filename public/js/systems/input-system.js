@@ -152,6 +152,7 @@ define([
 
   // game-over
   key('r', 'game-over', _.throttle(reset, 1000));
+  key('r', 'fail-victory', _.throttle(reset, 1000));
 
   // all
   key('backspace', function() {

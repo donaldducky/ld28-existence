@@ -147,8 +147,8 @@ define([
     // cave 2
     //
     life_rejuvenated: function(triggerEntity, game, x, y) {
-      delete triggerEntity.scaleX;
-      delete triggerEntity.scaleY;
+      triggerEntity.scaleX = 0;
+      triggerEntity.scaleY = 0;
       game.createMapEntity('data', {
         dataType: 'life_rejuvenated',
         dataValue: true

@@ -86,8 +86,8 @@ define([
     ],
     frameSpeed: 100,
     frameCount: 0,
-    scaleX: 0.1,
-    scaleY: 0.1,
+    scaleX: 0.05,
+    scaleY: 0.05,
     loopAnimation: false,
     onStopAnimation: 'life_rejuvenated'
   });

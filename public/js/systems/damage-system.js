@@ -57,6 +57,17 @@ define([
         }
       });
 
+      // special check for the life element
+      _.each(GameSystem.getEntities({ _type: 'life' }), function(life) {
+        var cx = life.x + (life.width / 2);
+        var cy = life.y + (life.height / 2);
+
+        if (cx > minX && cx < maxX && cy > minY && cy < maxY) {
+          hit = true;
+          GameSystem.getMap().triggerEvent('onLifeHit', { life: life });
+        }
+      });
+
       if (hit) {
         bullet.destroyed = true;
       }

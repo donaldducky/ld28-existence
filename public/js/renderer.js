@@ -16,8 +16,9 @@ define([
   'state',
   'screens/pause',
   'screens/game-over',
-  'screens/victory'
-], function($, _, backgroundSystem, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, aiSystem, hpBarSystem, damageSystem, animationSystem, GameSystem, settings, state, PauseScreen, GameOverScreen, VictoryScreen){
+  'screens/victory',
+  'screens/fail-victory'
+], function($, _, backgroundSystem, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, aiSystem, hpBarSystem, damageSystem, animationSystem, GameSystem, settings, state, PauseScreen, GameOverScreen, VictoryScreen, FailVictoryScreen){
   var ctx = document.getElementById(settings.canvasId).getContext('2d');
   settings.ctx = ctx;
 
@@ -36,9 +37,11 @@ define([
   var pauseScreen = new PauseScreen();
   var gameOverScreen = new GameOverScreen();
   var victoryScreen = new VictoryScreen();
+  var failVictoryScreen = new FailVictoryScreen();
 
   var isGameOver = false;
   var isVictory = false;
+  var isFailed = false;
 
   var game = new GameSystem(options);
   game.on('context', function(context) {
@@ -48,6 +51,8 @@ define([
       isGameOver = true;
     } else if (context === 'victory') {
       isVictory = true;
+    } else if (context === 'fail-victory') {
+      isFailed = true;
     }
   });
   game.on('reset', function() {
@@ -63,6 +68,9 @@ define([
       return;
     } else if (isVictory) {
       victoryScreen.render(ctx, width, height);
+      return;
+    } else if (isFailed) {
+      failVictoryScreen.render(ctx, width, height);
       return;
     }
 

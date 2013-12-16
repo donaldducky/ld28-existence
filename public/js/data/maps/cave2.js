@@ -69,7 +69,9 @@ define([
       }
     },
     events: {
-      onEnterMap: function() {
+      onLifeHit: function(game, options) {
+        console.log('life hit', options);
+        game.failVictory();
       }
     }
   };
