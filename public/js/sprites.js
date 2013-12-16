@@ -28,7 +28,17 @@ define([
     skeleton_dead: { x: 32, y: 32*3, width: 32, height: 32 },
     punch: { x: 32*2, y: 32*3, width: 32, height: 32 },
     blood: { x: 32*3, y: 32*3, width: 32, height: 32 },
-    explosion: { x: 32*4, y: 32*3, width: 32, height: 32 }
+    explosion: { x: 32*4, y: 32*3, width: 32, height: 32 },
+
+    life_1: { x: 0, y: 32*4, width: 32, height: 32 },
+    life_2: { x: 32, y: 32*4, width: 32, height: 32 },
+    life_3: { x: 32*2, y: 32*4, width: 32, height: 32 },
+    life_4: { x: 32*3, y: 32*4, width: 32, height: 32 },
+    life_5: { x: 32*4, y: 32*4, width: 32, height: 32 },
+    life_6: { x: 32*5, y: 32*4, width: 32, height: 32 },
+    life_7: { x: 32*6, y: 32*4, width: 32, height: 32 },
+    life_8: { x: 32*7, y: 32*4, width: 32, height: 32 },
+    life_9: { x: 32*8, y: 32*4, width: 32, height: 32 },
   };
 
   return sprites;

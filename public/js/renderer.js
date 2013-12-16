@@ -10,12 +10,14 @@ define([
   'systems/ai-system',
   'systems/hp-bar-system',
   'systems/damage-system',
+  'systems/animation-system',
   'game-system',
   'settings',
   'state',
   'screens/pause',
-  'screens/game-over'
-], function($, _, backgroundSystem, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, aiSystem, hpBarSystem, damageSystem, GameSystem, settings, state, PauseScreen, GameOverScreen){
+  'screens/game-over',
+  'screens/victory'
+], function($, _, backgroundSystem, spriteTransformingSystem, spriteRenderingSystem, entityDestroyingSystem, debugGridSystem, InputSystem, aiSystem, hpBarSystem, damageSystem, animationSystem, GameSystem, settings, state, PauseScreen, GameOverScreen, VictoryScreen){
   var ctx = document.getElementById(settings.canvasId).getContext('2d');
   settings.ctx = ctx;
 
@@ -33,8 +35,10 @@ define([
 
   var pauseScreen = new PauseScreen();
   var gameOverScreen = new GameOverScreen();
+  var victoryScreen = new VictoryScreen();
 
   var isGameOver = false;
+  var isVictory = false;
 
   var game = new GameSystem(options);
   game.on('context', function(context) {
@@ -42,6 +46,8 @@ define([
       pauseScreen.render(ctx, width, height);
     } else if (context === 'game-over') {
       isGameOver = true;
+    } else if (context === 'victory') {
+      isVictory = true;
     }
   });
   game.on('reset', function() {
@@ -54,6 +60,9 @@ define([
   function renderer() {
     if (isGameOver) {
       gameOverScreen.render(ctx, width, height);
+      return;
+    } else if (isVictory) {
+      victoryScreen.render(ctx, width, height);
       return;
     }
 
@@ -75,6 +84,7 @@ define([
     spriteTransformingSystem(game);
 
     // render sprites
+    animationSystem(game);
     spriteRenderingSystem(game, ctx);
 
     hpBarSystem(game, ctx);

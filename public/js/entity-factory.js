@@ -68,6 +68,30 @@ define([
     framesLeft: 25
   });
 
+  entities.life = entities.sprite.extend({
+    spriteId: 'life_1',
+    layer: LAYERS.unit,
+    solid: false,
+    animate: true,
+    frames: [
+      'life_1',
+      'life_2',
+      'life_3',
+      'life_4',
+      'life_5',
+      'life_6',
+      'life_7',
+      'life_8',
+      'life_9'
+    ],
+    frameSpeed: 100,
+    frameCount: 0,
+    scaleX: 0.1,
+    scaleY: 0.1,
+    loopAnimation: false,
+    onStopAnimation: 'life_rejuvenated'
+  });
+
   // if type is passed in, return the class
   // if type and args is passed in, return a new instance
   var entityFactory = function(type, args) {

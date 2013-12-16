@@ -33,7 +33,7 @@ define([
       "00000000000000000000",
       "00000000000000000000",
       "00000000000000000000",
-      "00000000000000000000",
+      "00000000020000000000",
       "00000000000000000001",
       "00000000000000000000",
       "00000000000000000000",
@@ -50,7 +50,7 @@ define([
       "                    ",
       "                    ",
       "                    ",
-      "                    ",
+      "         L          ",
       "                    ",
       "                    ",
       "                    ",
@@ -60,27 +60,12 @@ define([
       "                    "
     ],
     triggers: {
-      1: 'cave2_exit'
+      1: 'cave2_exit',
+      2: 'check_victory'
     },
     npcs: {
-      d: {
-        entityId: 'dog',
-        props: {
-          ai: 'random',
-          aiTicks: 0,
-          thinkSpeed: 100,
-          action: 'woof'
-        }
-      },
-      s: {
-        entityId: 'skeleton',
-        props: {
-          ai: 'aggressive',
-          aiTicks: 0,
-          thinkSpeed: 100,
-          hp: 5,
-          hpMax: 5
-        }
+      L: {
+        entityId: 'life'
       }
     },
     events: {

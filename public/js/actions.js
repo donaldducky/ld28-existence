@@ -144,6 +144,26 @@ define([
     }, 100),
 
     //
+    // cave 2
+    //
+    life_rejuvenated: function(triggerEntity, game, x, y) {
+      delete triggerEntity.scaleX;
+      delete triggerEntity.scaleY;
+      game.createMapEntity('data', {
+        dataType: 'life_rejuvenated',
+        dataValue: true
+      });
+      //game.victory();
+    },
+
+    check_victory: function(triggerEntity, game, x, y) {
+      var life = game.getEntities({ dataType: 'life_rejuvenated' });
+      if (life.length) {
+        game.victory();
+      }
+    },
+
+    //
     // traveling
     //
     cave_entrance: function(triggerEntity, game, x, y) {

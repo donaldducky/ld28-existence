@@ -167,6 +167,10 @@ define([
       this.setContext('game-over');
     },
 
+    victory: function() {
+      this.setContext('victory');
+    },
+
     talk: function(entity, message, options) {
       options = options || {};
       var e = this.createEntity('ui', _.extend({
