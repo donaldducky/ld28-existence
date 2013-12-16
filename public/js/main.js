@@ -5,7 +5,6 @@ require.config({
     underscore: 'lib/underscore',
     jquery: 'lib/jquery',
     tpl: 'lib/tpl',
-    q: 'lib/q',
     keymaster: 'lib/keymaster'
   },
   shim: {
