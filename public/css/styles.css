@@ -77,13 +77,49 @@ td.icon-description {
 .icon-cave { background-position: -128px -32px; }
 .icon-dirt { background-position: -160px -32px; }
 .icon-tree { background-position: -192px -32px; }
+.icon-arrow { background-position: -32px -64px; }
 .icon-skeleton { background-position: 0 -96px; }
 .icon-skull { background-position: -32px -96px; }
 .icon-punch { background-position: -64px -96px; }
 .icon-blood { background-position: -96px -96px; }
 .icon-explosion { background-position: -128px -96px; }
 .icon-life { background-position: 0 -128px; }
+.icon-life-half { background-position: -96px -128px; }
+.icon-life-shining { background-position: -256px -128px; }
 
 #sprites {
   display: none;
+}
+
+a {
+  background-color: #eee;
+  border-radius: 5px;
+  display: inline-block;
+  font-weight: bold;
+  padding: 5px 10px;
+}
+
+.walkthrough li {
+  text-align: left;
+  line-height: 30px;
+}
+
+.walkthrough-choice li {
+  text-align: left;
+  line-height: 30px;
+  list-style-type: lower-roman;
+}
+
+#walkthrough {
+  text-align: left;
+}
+
+#walkthrough h2 {
+  background-color: #eee;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+#walkthrough .icon {
+  vertical-align: middle;
 }
