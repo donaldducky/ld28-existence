@@ -4,7 +4,8 @@
   text-align: center;
 }
 
-#controls {
+#controls,
+#icons {
   border: 1px solid #000;
   border-radius: 5px;
   padding: 10px;
@@ -21,6 +22,15 @@ td.key {
 }
 td.description {
   padding: 2px 5px;
+  text-align: left;
+}
+
+td.icon-cell {
+  padding-right: 10px;
+}
+td.icon-description {
+  text-align: left;
+  padding-right: 30px;
 }
 
 .icon {
@@ -54,8 +64,25 @@ td.description {
   opacity: 0.2;
 }
 
+.icon-human { background-position: 0 0; }
 .icon-fire { background-position: -32px 0; }
 .icon-wind { background-position: -128px 0; }
+.icon-dog { background-position: -160px 0; }
+.icon-treasure { background-position: -192px 0; }
+.icon-treasure-opened { background-position: -224px 0; }
+.icon-forest { background-position: 0 -32px; }
+.icon-mountain { background-position: -32px -32px; }
+.icon-grass { background-position: -64px -32px; }
+.icon-river { background-position: -96px -32px; }
+.icon-cave { background-position: -128px -32px; }
+.icon-dirt { background-position: -160px -32px; }
+.icon-tree { background-position: -192px -32px; }
+.icon-skeleton { background-position: 0 -96px; }
+.icon-skull { background-position: -32px -96px; }
+.icon-punch { background-position: -64px -96px; }
+.icon-blood { background-position: -96px -96px; }
+.icon-explosion { background-position: -128px -96px; }
+.icon-life { background-position: 0 -128px; }
 
 #sprites {
   display: none;
