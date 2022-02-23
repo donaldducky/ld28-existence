@@ -1,5 +1,5 @@
 {
-  "name": "ld48",
+  "name": "ld28",
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
@@ -9,9 +9,14 @@
   "author": "",
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "grunt": "~0.4.2",
-    "grunt-php": "~0.3.0",
-    "grunt-contrib-watch": "~0.5.3",
-    "load-grunt-tasks": "~0.2.0"
+    "grunt": "^1.4.1",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-php": "^3.0.0",
+    "load-grunt-tasks": "^5.1.0"
+  },
+  "overrides": {
+    "grunt-php": {
+      "semver-regex": "3.1.3"
+    }
   }
 }
