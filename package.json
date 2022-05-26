@@ -9,7 +9,7 @@
   "author": "",
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "grunt": "^1.4.1",
+    "grunt": "^1.5.3",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-php": "^3.0.0",
     "load-grunt-tasks": "^5.1.0"
